@@ -23,4 +23,7 @@ II, Tools (Optional)
 	2. Middleware (Authen, Author, Validate data, Error Handle). Authen Author by JWT (Json Web Token)
 	3. Database PostGreSQL (use ORM Sequelize)
 	4. Audit log by winston
+	5. Swagger UI for Docs API 
   
+## Notes
+We recommend using Express JS, PostgreSQL. However, we encourage you to use the programming language that you are most comfortable with because we want you to shine with all your skills and knowledge.
