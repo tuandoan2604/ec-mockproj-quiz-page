@@ -1,6 +1,6 @@
 # Quiz Page EC Backend
 
-## Project1 in EC, this repo and show us your development progress via a Pull Request.
+## Project1 in EC,Please fork this repo and show us your development progress via a Pull Request.
 
 I, Requirements
 
