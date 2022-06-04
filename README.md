@@ -24,6 +24,14 @@ II, Tools (Optional)
 	3. Database PostGreSQL (use ORM Sequelize)
 	4. Audit log by winston
 	5. Swagger UI for Docs API 
+	
+IV, Write a concise README
+
+	How to run your code locally?
+	A sample “curl” command to call your API
+	How to run your unit tests locally?
+	What do you love about your solution?
+	What else do you want us to know about however you do not have enough time to complete?
   
 ## Notes
 We recommend using Express JS, PostgreSQL. However, we encourage you to use the programming language that you are most comfortable with because we want you to shine with all your skills and knowledge.
