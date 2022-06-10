@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import { UserController } from "./controllers/user.controller";
 import { AppDataSource } from "./data-source";
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDoccument from './swagger.json'
 
 class App {
   private UserController: UserController;
@@ -14,7 +16,12 @@ class App {
 
   public configuration() {
     this.app.set("port", process.env.PORT || 8080);
-    this.app.use(express.json());
+    // this.app.use(express.json());
+    this.app.use(
+      "/swagger/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDoccument)
+    );
   }
 
   public async routes() {
