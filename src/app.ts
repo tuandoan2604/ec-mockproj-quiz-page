@@ -1,26 +1,6 @@
 import express, { Request, Response } from "express";
 import { UserController } from "./controllers/user.controller";
 import { AppDataSource } from "./data-source";
-import { createConnection } from "typeorm";
-
-// const main = async () => {
-//   try {
-//     await AppDataSource.initialize()
-//       .then(() => {
-//         console.log("Connect to database successfully!");
-//       })
-//       .catch((error) => console.log(error));
-
-//     app.listen(8080, () => {
-//       console.log("Server is running on port 8080");
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     throw new Error("Unable to connect to database");
-//   }
-// };
-
-// main();
 
 class App {
   private UserController: UserController;
