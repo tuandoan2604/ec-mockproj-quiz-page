@@ -2,6 +2,7 @@ import { Router, Response, Request, response } from "express";
 import { UserService } from "../services/user.service";
 import { BAD_REQUEST } from "http-status-codes";
 import { DataResponse } from "./data-response/data-response";
+import { UserDTO } from "src/services/dtos/user.dto";
 
 export class UserController {
   public readonly router: Router;
@@ -14,61 +15,96 @@ export class UserController {
   }
 
   public getAllUser = async (req: Request, res: Response) => {
-    let dataResponse = new DataResponse();
+    let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       let users = await this.userService.getAllUser();
 
       dataResponse.result = users;
-      dataResponse.statusCode = 200;
-      dataResponse.message = "OK";
 
       res.send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
-      dataResponse.message = "Internal Server Error";
+      dataResponse.message = "Internal server error";
 
       res.send(dataResponse).json();
     }
   };
 
   public getUserById = async (req: Request, res: Response) => {
-    let dataResponse = new DataResponse();
+    let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       const id = Number(req.params.id);
       const userFound = await this.userService.getUserById(id);
-
-      dataResponse.result = userFound;
-      dataResponse.statusCode = 200;
-      dataResponse.message = "OK";
+      if (userFound) {
+        dataResponse.result = userFound;
+      } else {
+        dataResponse.statusCode = 404;
+        dataResponse.message = "User not found";
+      }
 
       res.send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
-      dataResponse.message = "Internal Server Error";
+      dataResponse.message = "Internal server error";
 
       res.send(dataResponse).json();
     }
   };
 
   public create = async (req: Request, res: Response) => {
-    let dataResponse = new DataResponse();
+    let dataResponse = new DataResponse(null, 201, "Successfully created");
     try {
-      console.log(req);
+      const userDTO: UserDTO = req.body;
+      const userCreated = await this.userService.create(userDTO);
+
+      dataResponse.result = userCreated;
+
       res.send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
-      dataResponse.message = "Internal Server Error";
+      dataResponse.message = "Internal server error";
 
       res.send(dataResponse).json();
     }
   };
 
   public update = async (req: Request, res: Response) => {
-    res.send("Update user");
+    let dataResponse = new DataResponse(null, 200, "Successfully updated");
+    try {
+      const userDTO: UserDTO = req.body;
+      const userUpdated = await this.userService.update(userDTO);
+
+      dataResponse.result = userUpdated;
+
+      res.send(dataResponse).json();
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      res.send(dataResponse).json();
+    }
   };
 
   public delete = async (req: Request, res: Response) => {
-    res.send("Delete user");
+    let dataResponse = new DataResponse(null, 200, "Successfully deleted");
+    try {
+      const id = Number(req.params.id);
+      const userToDelete = await this.userService.getUserById(id);
+      if (userToDelete) {
+        const userDeleted = await this.userService.delete(userToDelete);
+        dataResponse.result = userDeleted;
+      } else {
+        dataResponse.statusCode = 404;
+        dataResponse.message = "User not found";
+      }
+
+      res.send(dataResponse).json();
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      res.send(dataResponse).json();
+    }
   };
 
   /**
