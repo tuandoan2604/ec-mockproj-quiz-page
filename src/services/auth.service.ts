@@ -3,6 +3,9 @@ import { UserLoginDTO } from "./dtos/user-login.dto";
 import { UserDTO } from "./dtos/user.dto";
 import * as bcrypt from "bcrypt";
 import { UserMapper } from "./mappers/user.mapper";
+import { Payload } from "../utils/security/payload.interface";
+import jwt, { SignOptions } from 'jsonwebtoken';
+
 export class AuthService {
   constructor(private readonly userRepository = new UserRepository()) {}
 
@@ -11,7 +14,8 @@ export class AuthService {
     const password = userLogin.password;
 
     const userFind = await this.userRepository.findByUsername(username);
-    const isCorrectPassword = userFind && await bcrypt.compare(password, userFind.password);
+    const isCorrectPassword =
+      userFind && (await bcrypt.compare(password, userFind.password));
     if (!userFind || !isCorrectPassword) {
       return {
         statusCode: 400,
@@ -20,10 +24,20 @@ export class AuthService {
       };
     }
 
+    const payload: Payload = {
+      id: userFind.id,
+      username: userFind.username,
+      role: userFind.role,
+    };
+
+    const JWT_SECRET: any = process.env.ACCESS_TOKEN_SECRET;
+
+    const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: '30s'})
+
     return {
       statusCode: 201,
       message: "Successfully logged",
-      result: userFind,
+      accessToken: accessToken,
     };
   }
 

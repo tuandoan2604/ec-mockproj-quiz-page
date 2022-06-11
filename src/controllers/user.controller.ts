@@ -2,6 +2,8 @@ import { Router, Response, Request } from "express";
 import { UserService } from "../services/user.service";
 import { DataResponse } from "./data-response/data-response";
 import { UserDTO } from "../services/dtos/user.dto";
+import { checkJwt } from "../middlewares/checkJwt";
+import { checkRole } from "../middlewares/checkRole";
 
 export class UserController {
   public readonly router: Router;
@@ -110,10 +112,10 @@ export class UserController {
    * Configure the routes of controller
    */
   public routes() {
-    this.router.get("/", this.getAllUser);
-    this.router.get("/:id", this.getUserById);
-    this.router.post("/", this.create);
-    this.router.put("/", this.update);
-    this.router.delete("/:id", this.delete);
+    this.router.get("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getAllUser);
+    this.router.get("/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getUserById);
+    this.router.post("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.create);
+    this.router.put("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.update);
+    this.router.delete("/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.delete);
   }
 }
