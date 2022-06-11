@@ -34,12 +34,12 @@ export class UserController {
   public getUserById = async (req: Request, res: Response) => {
     let dataResponse = new DataResponse();
     try {
-      const id = Number(req.query.id);
+      const id = Number(req.params.id);
       const userFound = await this.userService.getUserById(id);
 
       dataResponse.result = userFound;
       dataResponse.statusCode = 200;
-      dataResponse.message = 'OK';
+      dataResponse.message = "OK";
 
       res.send(dataResponse).json();
     } catch (error) {
@@ -51,7 +51,16 @@ export class UserController {
   };
 
   public create = async (req: Request, res: Response) => {
-    res.send("Create user");
+    let dataResponse = new DataResponse();
+    try {
+      console.log(req);
+      res.send(dataResponse).json();
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal Server Error";
+
+      res.send(dataResponse).json();
+    }
   };
 
   public update = async (req: Request, res: Response) => {
@@ -66,10 +75,10 @@ export class UserController {
    * Configure the routes of controller
    */
   public routes() {
-    this.router.get("/get-all", this.getAllUser);
-    this.router.get("/get-by-id", this.getUserById);
-    this.router.post("/create", this.create);
-    this.router.put("/update/:id", this.update);
-    this.router.delete("/delete/:id", this.delete);
+    this.router.get("/", this.getAllUser);
+    this.router.get("/:id", this.getUserById);
+    this.router.post("/", this.create);
+    this.router.put("/", this.update);
+    this.router.delete("/:id", this.delete);
   }
 }

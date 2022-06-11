@@ -2,7 +2,8 @@ import express, { Request, Response } from "express";
 import { UserController } from "./controllers/user.controller";
 import { AppDataSource } from "./data-source";
 import swaggerUi from "swagger-ui-express";
-import * as swaggerDoccument from './swagger.json'
+import * as swaggerDoccument from "./swagger.json";
+import bodyParser from "body-parser";
 
 class App {
   private UserController: UserController;
@@ -22,6 +23,11 @@ class App {
       swaggerUi.serve,
       swaggerUi.setup(swaggerDoccument)
     );
+
+    // parse application/x-www-form-urlencoded
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    // parse application/json
+    this.app.use(bodyParser.json());
   }
 
   public async routes() {
