@@ -1,6 +1,7 @@
-import { Router, Response, Request } from "express";
+import { Router, Response, Request, response } from "express";
 import { UserService } from "../services/user.service";
-
+import { BAD_REQUEST } from "http-status-codes";
+import { DataResponse } from "./data-response/data-response";
 
 export class UserController {
   public readonly router: Router;
@@ -13,8 +14,40 @@ export class UserController {
   }
 
   public getAllUser = async (req: Request, res: Response) => {
-    const posts = await this.userService.getAllUser();
-    res.send(posts).json();
+    let dataResponse = new DataResponse();
+    try {
+      let users = await this.userService.getAllUser();
+
+      dataResponse.result = users;
+      dataResponse.statusCode = 200;
+      dataResponse.message = "OK";
+
+      res.send(dataResponse).json();
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal Server Error";
+
+      res.send(dataResponse).json();
+    }
+  };
+
+  public getUserById = async (req: Request, res: Response) => {
+    let dataResponse = new DataResponse();
+    try {
+      const id = Number(req.query.id);
+      const userFound = await this.userService.getUserById(id);
+
+      dataResponse.result = userFound;
+      dataResponse.statusCode = 200;
+      dataResponse.message = 'OK';
+
+      res.send(dataResponse).json();
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal Server Error";
+
+      res.send(dataResponse).json();
+    }
   };
 
   public create = async (req: Request, res: Response) => {
@@ -33,9 +66,10 @@ export class UserController {
    * Configure the routes of controller
    */
   public routes() {
-    this.router.get("/", this.getAllUser);
-    this.router.post("/", this.create);
-    this.router.put("/:id", this.update);
-    this.router.delete("/:id", this.delete);
+    this.router.get("/get-all", this.getAllUser);
+    this.router.get("/get-by-id", this.getUserById);
+    this.router.post("/create", this.create);
+    this.router.put("/update/:id", this.update);
+    this.router.delete("/delete/:id", this.delete);
   }
 }

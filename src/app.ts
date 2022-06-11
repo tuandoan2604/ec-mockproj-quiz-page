@@ -47,6 +47,7 @@ class App {
     try {
       this.app.listen(this.app.get("port"), () => {
         console.log(`Server is listening ${this.app.get("port")} port.`);
+        console.log(`Swagger UI: /swagger/api-docs`);
       });
     } catch (error) {
       console.error("An error occurred while starting the server: ", error);
