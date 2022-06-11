@@ -4,9 +4,11 @@ import { AppDataSource } from "./data-source";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDoccument from "./swagger.json";
 import bodyParser from "body-parser";
+import { AuthController } from "./controllers/auth.controller";
 
 class App {
   private UserController: UserController;
+  private AuthController: AuthController;
   private app: express.Application;
 
   constructor() {
@@ -37,13 +39,16 @@ class App {
       })
       .catch((error) => console.log(error));
 
-    this.UserController = new UserController();
-
     this.app.get("/", (req: Request, res: Response) => {
       res.send("My Quiz!");
     });
 
-    this.app.use(`/api/user/`, this.UserController.router); // Configure the new routes of the controller post
+    this.UserController = new UserController();
+    this.AuthController = new AuthController();
+
+    // Configure the new routes of the controller
+    this.app.use(`/api/auth/`, this.AuthController.router); 
+    this.app.use(`/api/user/`, this.UserController.router); 
   }
 
   /**

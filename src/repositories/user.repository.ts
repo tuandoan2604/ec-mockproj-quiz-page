@@ -34,4 +34,8 @@ export class UserRepository {
     return userDeleted;
   }
 
+  async findByUsername(username: string): Promise<UserEntity | any> {
+    return await this.userRepository.findOne({where: {username: username}});
+  }
+
 }

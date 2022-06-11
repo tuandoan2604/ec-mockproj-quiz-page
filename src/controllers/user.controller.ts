@@ -1,8 +1,7 @@
-import { Router, Response, Request, response } from "express";
+import { Router, Response, Request } from "express";
 import { UserService } from "../services/user.service";
-import { BAD_REQUEST } from "http-status-codes";
 import { DataResponse } from "./data-response/data-response";
-import { UserDTO } from "src/services/dtos/user.dto";
+import { UserDTO } from "../services/dtos/user.dto";
 
 export class UserController {
   public readonly router: Router;
