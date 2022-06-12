@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
+import { expiresIn_Token } from "../utils/config/const.config";
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   const JWT_SECRET: any = process.env.ACCESS_TOKEN_SECRET;
@@ -41,7 +42,7 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // We want to send a new token on every request
   const { id, username, role } = jwtPayload;
   const newAccessToken = jwt.sign({ id, username, role }, JWT_SECRET, {
-    expiresIn: "30s",
+    expiresIn: expiresIn_Token,
   });
   res.setHeader("accessToken", newAccessToken);
 

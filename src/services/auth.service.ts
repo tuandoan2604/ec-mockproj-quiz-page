@@ -4,7 +4,8 @@ import { UserDTO } from "./dtos/user.dto";
 import * as bcrypt from "bcrypt";
 import { UserMapper } from "./mappers/user.mapper";
 import { Payload } from "../utils/security/payload.interface";
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { expiresIn_Token } from "../utils/config/const.config";
 
 export class AuthService {
   constructor(private readonly userRepository = new UserRepository()) {}
@@ -32,7 +33,7 @@ export class AuthService {
 
     const JWT_SECRET: any = process.env.ACCESS_TOKEN_SECRET;
 
-    const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: '30s'})
+    const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: expiresIn_Token })
 
     return {
       statusCode: 201,

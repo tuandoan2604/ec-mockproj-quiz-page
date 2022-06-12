@@ -1,0 +1,1 @@
+export const expiresIn_Token = '1h';
