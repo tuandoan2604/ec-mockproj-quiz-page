@@ -11,8 +11,164 @@
   },
   "servers": [
     {
-      "url": "/",
-      "description": "HTTP"
+      "url": "http://localhost:8080/api"
     }
-  ]
+  ],
+  "definitions": {
+    "UserLoginDTO": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "remember": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserDTO": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth Controller"],
+        "summary": "Authorization - Login api retrieving token",
+        "requestBody": {
+          "description": "UserLoginDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged"
+          },
+          "400": {
+            "description": "Invalid username or password"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth Controller"],
+        "summary": "Authorization - Register api create new account",
+        "requestBody": {
+          "description": "UserDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered"
+          },
+          "400": {
+            "description": "Invalid username / Invalid password / Username is already in use"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["User Controller"],
+        "summary": "Authorization - Login api retrieving token",
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    }
+  }
 }

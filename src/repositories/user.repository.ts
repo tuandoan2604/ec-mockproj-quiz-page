@@ -9,33 +9,60 @@ export class UserRepository {
   ) {}
  
   async find(): Promise<UserEntity[] | any> {
-    return await this.userRepository.find();
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      return;
+    }
   }
 
   async findOne(id: number): Promise<UserEntity | any> {
-    return await this.userRepository.findOne({where: {id}});
+    try {
+      return await this.userRepository.findOne({where: {id}});
+    } catch (error) {
+      return;
+    }
   }
 
   async save(userEntity: UserEntity): Promise<UserEntity | any> {
-    const userCreated = await this.userRepository.save(userEntity);
+    try {
+      const userCreated = await this.userRepository.save(userEntity);
 
-    return userCreated;
+      return userCreated;
+    } catch (error) {
+      return;
+    }
   }
 
   async update(userEntity: UserEntity): Promise<UserEntity | any> {
-    const userUpdated = await this.userRepository.save(userEntity);
+    try {
+      const userUpdated = await this.userRepository.save(userEntity);
 
-    return userUpdated;
+      return userUpdated;
+    } catch (error) {
+      return;
+    }
   }
 
   async delete(userEntity: UserEntity): Promise<UserEntity | any> {
-    const userDeleted = await this.userRepository.remove(userEntity);
+    try {
+      const userDeleted = await this.userRepository.remove(userEntity);
 
-    return userDeleted;
+      return userDeleted;
+    } catch (error) {
+      return;
+    }
   }
 
   async findByUsername(username: string): Promise<UserEntity | any> {
-    return await this.userRepository.findOne({where: {username: username}});
+    try {
+      return await this.userRepository.findOneOrFail({
+        where: {username: username},
+        select: ['id', 'username', 'password', 'fullName', 'role']
+      });
+    } catch (error) {
+      return;
+    }
   }
 
 }

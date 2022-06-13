@@ -5,6 +5,18 @@ import { UserDTO } from "../services/dtos/user.dto";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 
+import {
+  Body,
+  Controller,
+  Get,
+  Path,
+  Post,
+  Query,
+  Route,
+  SuccessResponse,
+} from "tsoa";
+
+@Route("user")
 export class UserController {
   public readonly router: Router;
   private readonly userService: UserService;
@@ -15,6 +27,7 @@ export class UserController {
     this.routes();
   }
 
+  @Get("/")
   public getAllUser = async (req: Request, res: Response) => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
@@ -22,12 +35,12 @@ export class UserController {
 
       dataResponse.result = users;
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
@@ -43,12 +56,12 @@ export class UserController {
         dataResponse.message = "User not found";
       }
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
@@ -60,12 +73,12 @@ export class UserController {
 
       dataResponse.result = userCreated;
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
@@ -77,12 +90,12 @@ export class UserController {
 
       dataResponse.result = userUpdated;
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
@@ -99,12 +112,12 @@ export class UserController {
         dataResponse.message = "User not found";
       }
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 

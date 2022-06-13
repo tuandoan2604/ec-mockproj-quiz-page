@@ -3,6 +3,7 @@ import { DataResponse } from "./data-response/data-response";
 import { AuthService } from "../services/auth.service";
 import { UserLoginDTO } from "../services/dtos/user-login.dto";
 import { UserDTO } from "src/services/dtos/user.dto";
+import { Body } from "tsoa";
 
 export class AuthController {
   public readonly router: Router;
@@ -15,7 +16,7 @@ export class AuthController {
   }
 
   public login = async (req: Request, res: Response) => {
-    let dataResponse = new DataResponse(null, 201, "Successfully created");
+    let dataResponse = new DataResponse(null, 200, "Successfully logged");
     try {
       const userLoginDTO: UserLoginDTO = req.body;
 
@@ -32,17 +33,18 @@ export class AuthController {
         dataResponse = result;
       }
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
   public register = async (req: Request, res: Response) => {
-    let dataResponse = new DataResponse(null, 201, "Successfully created");
+    let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       const newUser: UserDTO = req.body;
 
@@ -64,12 +66,12 @@ export class AuthController {
         dataResponse.message = "Invalid password";
       }
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.send(dataResponse).json();
+      res.status(dataResponse.statusCode).send(dataResponse).json();
     }
   };
 
