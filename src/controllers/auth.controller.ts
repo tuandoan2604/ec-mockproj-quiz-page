@@ -15,7 +15,7 @@ export class AuthController {
     this.routes();
   }
 
-  public login = async (req: Request, res: Response) => {
+  public login = async (req: Request, res: Response): Promise<any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully logged");
     try {
       const userLoginDTO: UserLoginDTO = req.body;
@@ -33,17 +33,16 @@ export class AuthController {
         dataResponse = result;
       }
 
-      res.status(dataResponse.statusCode).send(dataResponse).json();
+      return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.status(dataResponse.statusCode).send(dataResponse).json();
+      return res.status(dataResponse.statusCode).send(dataResponse);
     }
   };
 
-  public register = async (req: Request, res: Response) => {
+  public register = async (req: Request, res: Response): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       const newUser: UserDTO = req.body;
@@ -66,12 +65,12 @@ export class AuthController {
         dataResponse.message = "Invalid password";
       }
 
-      res.status(dataResponse.statusCode).send(dataResponse).json();
+      return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
-      res.status(dataResponse.statusCode).send(dataResponse).json();
+      return res.status(dataResponse.statusCode).send(dataResponse);
     }
   };
 

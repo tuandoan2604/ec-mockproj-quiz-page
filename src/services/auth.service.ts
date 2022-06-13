@@ -48,7 +48,7 @@ export class AuthService {
     }
   }
 
-  async register(newUser: UserDTO): Promise<any> {
+  async register(newUser: UserDTO): Promise<UserDTO | any> {
     try {
       const userFind = await this.userRepository.findByUsername(newUser.username);
       
