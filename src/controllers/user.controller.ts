@@ -28,7 +28,10 @@ export class UserController {
   }
 
   @Get("/")
-  public getAllUser = async (req: Request, res: Response): Promise<UserDTO[] | any> => {
+  public getAllUser = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO[] | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       let users = await this.userService.getAllUser();
@@ -44,7 +47,10 @@ export class UserController {
     }
   };
 
-  public getUserById = async (req: Request, res: Response): Promise<UserDTO | any> => {
+  public getUserById = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
       const id = Number(req.params.id);
@@ -65,15 +71,38 @@ export class UserController {
     }
   };
 
-  public create = async (req: Request, res: Response): Promise<UserDTO | any> => {
+  public create = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 201, "Successfully created");
     try {
       const userDTO: UserDTO = req.body;
-      const userCreated = await this.userService.create(userDTO);
 
-      dataResponse.result = userCreated;
+      let isUsernameValid = true;
+      let isPasswordValid = true;
 
-      return res.status(dataResponse.statusCode).send(dataResponse);
+      if (!isUsernameValid) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid username";
+      }
+
+      if (!isPasswordValid) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid password";
+      }
+
+      if (isUsernameValid && isPasswordValid) {
+        const userCreated = await this.userService.create(userDTO);
+        if (userCreated === "Username is already in use") {
+          dataResponse.statusCode = 400;
+          dataResponse.message = "Username is already in use";
+          return res.status(dataResponse.statusCode).send(dataResponse);
+        } else {
+          dataResponse = userCreated;
+          return res.status(dataResponse.statusCode).send(dataResponse);
+        }
+      }
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
@@ -82,7 +111,10 @@ export class UserController {
     }
   };
 
-  public update = async (req: Request, res: Response): Promise<UserDTO | any> => {
+  public update = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully updated");
     try {
       const userDTO: UserDTO = req.body;
@@ -99,7 +131,10 @@ export class UserController {
     }
   };
 
-  public delete = async (req: Request, res: Response): Promise<UserDTO | any> => {
+  public delete = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully deleted");
     try {
       const id = Number(req.params.id);
@@ -113,7 +148,6 @@ export class UserController {
       }
 
       return res.status(dataResponse.statusCode).send(dataResponse);
-
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
@@ -132,10 +166,10 @@ export class UserController {
     // this.router.put("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.update);
     // this.router.delete("/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.delete);
 
-    this.router.get("/", this.getAllUser);
-    this.router.get("/:id", this.getUserById);
-    this.router.post("/", this.create);
-    this.router.put("/", this.update);
-    this.router.delete("/:id", this.delete);
+    this.router.get("/get-all", this.getAllUser);
+    this.router.get("/get-one/:id", this.getUserById);
+    this.router.post("/create", this.create);
+    this.router.put("/update", this.update);
+    this.router.delete("/delete/:id", this.delete);
   }
 }

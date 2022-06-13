@@ -1,6 +1,9 @@
 import { UserRepository } from "../repositories/user.repository";
 import { UserDTO } from "./dtos/user.dto";
 import { UserMapper } from "./mappers/user.mapper";
+import { transformPassword } from '../utils/security/password.util';
+import * as bcrypt from "bcrypt";
+
 export class UserService {
   constructor(private readonly userRepository = new UserRepository()) {}
 
@@ -28,10 +31,24 @@ export class UserService {
 
   public create = async (userDTO: UserDTO): Promise<UserDTO | any> => {
     try {
-      const newUser = UserMapper.fromDTOtoEntity(userDTO);
-      const userCreated = await this.userRepository.save(newUser);
+      const userFind = await this.userRepository.findByUsername(
+        userDTO.username
+      );
 
-      return UserMapper.fromEntityToDTO(userCreated);
+      if (userFind) {
+        return "Username is already in use";
+      }
+
+      userDTO.role = "ROLE_USER";
+      userDTO.password = await transformPassword(userDTO.password);
+
+      const userCreated = await this.userRepository.save(
+        UserMapper.fromDTOtoEntity(userDTO)
+      );
+
+      delete userCreated.password;
+
+      return userCreated;
     } catch (error) {
       return;
     }
@@ -52,7 +69,7 @@ export class UserService {
     try {
       const userToDelete = UserMapper.fromDTOtoEntity(userDTO);
       const userDeleted = await this.userRepository.delete(userToDelete);
-  
+
       return UserMapper.fromEntityToDTO(userDeleted);
     } catch (error) {
       return;

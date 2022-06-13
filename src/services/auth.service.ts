@@ -6,9 +6,13 @@ import { UserMapper } from "./mappers/user.mapper";
 import { Payload } from "../utils/security/payload.interface";
 import jwt from "jsonwebtoken";
 import { expiresIn_Token } from "../utils/config/const.config";
+import { UserService } from "./user.service";
 
 export class AuthService {
-  constructor(private readonly userRepository = new UserRepository()) {}
+  constructor(
+    private readonly userRepository = new UserRepository(),
+    private readonly userService = new UserService()
+  ) {}
 
   async login(userLogin: UserLoginDTO): Promise<any> {
     try {
@@ -50,25 +54,16 @@ export class AuthService {
 
   async register(newUser: UserDTO): Promise<UserDTO | any> {
     try {
-      const userFind = await this.userRepository.findByUsername(newUser.username);
-      
-      if (userFind) {
+      const userRegisted: any = await this.userService.create(newUser);
+
+      if (userRegisted === "Username is already in use") {
         return {
           statusCode: 400,
           message: "Username is already in use",
           result: null,
         };
       }
-  
-      newUser.role = "ROLE_USER";
-      newUser.password = await bcrypt.hash(newUser.password, 10);
-  
-      const userRegisted = await this.userRepository.save(
-        UserMapper.fromDTOtoEntity(newUser)
-      );
 
-      delete userRegisted.password;
-  
       return {
         statusCode: 201,
         message: "Successfully registered",
