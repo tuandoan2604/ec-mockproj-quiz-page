@@ -4,19 +4,10 @@ import { DataResponse } from "./data-response/data-response";
 import { UserDTO } from "../services/dtos/user.dto";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
+import { isNumber } from "../utils/validation/is-number.util";
+import { isUsernameValid } from '../utils/validation/is-username-val.util';
+import { isPasswordValid } from '../utils/validation/is-password-val.util';
 
-import {
-  Body,
-  Controller,
-  Get,
-  Path,
-  Post,
-  Query,
-  Route,
-  SuccessResponse,
-} from "tsoa";
-
-@Route("user")
 export class UserController {
   public readonly router: Router;
   private readonly userService: UserService;
@@ -27,7 +18,6 @@ export class UserController {
     this.routes();
   }
 
-  @Get("/")
   public getAllUser = async (
     req: Request,
     res: Response
@@ -53,8 +43,15 @@ export class UserController {
   ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
+      if (!isNumber(req.params.id)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid ID! ID Must be a number";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
       const id = Number(req.params.id);
       const userFound = await this.userService.getUserById(id);
+
       if (userFound) {
         dataResponse.result = userFound;
       } else {
@@ -79,20 +76,17 @@ export class UserController {
     try {
       const userDTO: UserDTO = req.body;
 
-      let isUsernameValid = true;
-      let isPasswordValid = true;
-
-      if (!isUsernameValid) {
+      if (!isPasswordValid(userDTO.password)) {
         dataResponse.statusCode = 400;
-        dataResponse.message = "Invalid username";
+        dataResponse.message = "Invalid password! Password must contain between 5-20 characters and no spaces.";
       }
 
-      if (!isPasswordValid) {
+      if (!isUsernameValid(userDTO.username)) {
         dataResponse.statusCode = 400;
-        dataResponse.message = "Invalid password";
+        dataResponse.message = "Invalid username! accepts 4 to 15 characters with any lower case character, digit or special symbol “_-” only.";
       }
 
-      if (isUsernameValid && isPasswordValid) {
+      if (isUsernameValid(userDTO.username) && isPasswordValid(userDTO.password)) {
         const userCreated = await this.userService.create(userDTO);
         if (userCreated === "Username is already in use") {
           dataResponse.statusCode = 400;
@@ -103,6 +97,9 @@ export class UserController {
           return res.status(dataResponse.statusCode).send(dataResponse);
         }
       }
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
@@ -137,6 +134,12 @@ export class UserController {
   ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully deleted");
     try {
+      if (!isNumber(req.params.id)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid ID! ID Must be a number";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
       const id = Number(req.params.id);
       const userToDelete = await this.userService.getUserById(id);
       if (userToDelete) {

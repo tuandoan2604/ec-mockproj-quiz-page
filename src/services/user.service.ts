@@ -2,7 +2,6 @@ import { UserRepository } from "../repositories/user.repository";
 import { UserDTO } from "./dtos/user.dto";
 import { UserMapper } from "./mappers/user.mapper";
 import { transformPassword } from '../utils/security/password.util';
-import * as bcrypt from "bcrypt";
 
 export class UserService {
   constructor(private readonly userRepository = new UserRepository()) {}

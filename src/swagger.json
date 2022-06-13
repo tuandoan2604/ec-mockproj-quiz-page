@@ -159,8 +159,14 @@
           "201": {
             "description": "Successfully registered"
           },
+          "400 - Invalid username!": {
+            "description": "Accepts 5 to 15 characters with any lower case character, digit or special symbol “_-” only."
+          },
+          "400 - Invalid password!": {
+            "description": "Password must contain between 5-20 characters and no spaces."
+          },
           "400": {
-            "description": "Invalid username / Invalid password / Username is already in use"
+            "description": "Username is already in use"
           },
           "500": {
             "description": "Internal server error"
@@ -252,6 +258,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
           },
           "401": {
             "description": "Unauthorized"
