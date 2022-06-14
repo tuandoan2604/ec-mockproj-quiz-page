@@ -1,4 +1,5 @@
 import { BaseDTO } from "./base/base.dto";
+import { QuestionDTO } from "./question.dto";
 import { UserDTO } from "./user.dto";
 
 /**
@@ -8,4 +9,5 @@ export class QuizDTO extends BaseDTO {
   code: string;
   name?: string;
   creator?: UserDTO;
+  questions?: QuestionDTO[];
 }

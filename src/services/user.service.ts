@@ -12,7 +12,14 @@ export class UserService {
       if (!users) {
         return [];
       }
-      return users;
+      
+      const usersDTO: UserDTO[] = [];
+
+      users.forEach((user: UserDTO) =>
+        usersDTO.push(UserMapper.fromEntityToDTO(user))
+      );
+
+      return usersDTO;
     } catch (error) {
       return;
     }

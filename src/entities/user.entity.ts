@@ -16,6 +16,6 @@ export class UserEntity extends BaseEntity {
   @Column()
   role: string;
 
-  @OneToMany(() => QuizEntity, (quiz) => quiz.user)
+  @OneToMany(() => QuizEntity, (quiz) => quiz.creator)
   quizs?: QuizEntity[];
 }

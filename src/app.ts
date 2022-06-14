@@ -8,11 +8,14 @@ import bodyParser from "body-parser";
 import { AuthController } from "./controllers/auth.controller";
 import { UserController } from "./controllers/user.controller";
 import { QuizController } from "./controllers/quiz.controller";
+import { QuestionController } from "./controllers/question.controller";
+
 
 class App {
   private AuthController: AuthController;
   private UserController: UserController;
   private QuizController: QuizController;
+  private QuestionController: QuestionController;
 
   private app: express.Application;
 
@@ -51,11 +54,13 @@ class App {
     this.AuthController = new AuthController();
     this.UserController = new UserController();
     this.QuizController = new QuizController();
+    this.QuestionController = new QuestionController();
 
     // Configure the new routes of the controller
-    this.app.use(`/api/auth/`, this.AuthController.router); 
-    this.app.use(`/api/user/`, this.UserController.router); 
-    this.app.use(`/api/quiz/`, this.QuizController.router); 
+    this.app.use(`/api/auth/`, this.AuthController.router);
+    this.app.use(`/api/user/`, this.UserController.router);
+    this.app.use(`/api/quiz/`, this.QuizController.router);
+    this.app.use(`/api/question/`, this.QuestionController.router);
   }
 
   /**

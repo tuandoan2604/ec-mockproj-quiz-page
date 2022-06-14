@@ -11,7 +11,14 @@ export class QuizService {
       if (!quizs) {
         return [];
       }
-      return quizs;
+
+      const quizsDTO: QuizDTO[] = [];
+
+      quizs.forEach((quiz: QuizDTO) =>
+        quizsDTO.push(QuizMapper.fromEntityToDTO(quiz))
+      );
+
+      return quizsDTO;
     } catch (error) {
       return;
     }
