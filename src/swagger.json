@@ -25,7 +25,7 @@
         },
         "password": {
           "type": "string",
-          "example": "123"
+          "example": "12345"
         },
         "remember": {
           "type": "boolean"
@@ -42,7 +42,7 @@
         },
         "password": {
           "type": "string",
-          "example": "123"
+          "example": "12345"
         },
         "fullName": {
           "type": "string",
@@ -68,7 +68,7 @@
         },
         "password": {
           "type": "string",
-          "example": "123"
+          "example": "12345"
         },
         "fullName": {
           "type": "string",
@@ -351,7 +351,7 @@
     "/api/user/update": {
       "put": {
         "tags": ["User Controller"],
-        "summary": "Create user",
+        "summary": "Update user",
         "requestBody": {
           "description": "UserDTO",
           "required": true,

@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/user.repository";
 import { UserDTO } from "./dtos/user.dto";
 import { UserMapper } from "./mappers/user.mapper";
-import { transformPassword } from '../utils/security/password.util';
+import { transformPassword } from "../utils/security/password.util";
 
 export class UserService {
   constructor(private readonly userRepository = new UserRepository()) {}
@@ -21,6 +21,16 @@ export class UserService {
   public getUserById = async (id: number): Promise<UserDTO | any> => {
     try {
       const userFound = await this.userRepository.findOne(id);
+
+      return UserMapper.fromEntityToDTO(userFound);
+    } catch (error) {
+      return;
+    }
+  };
+
+  public getUserByUsername = async (username: string): Promise<UserDTO | any> => {
+    try {
+      const userFound = await this.userRepository.findByUsername(username);
 
       return UserMapper.fromEntityToDTO(userFound);
     } catch (error) {
@@ -55,8 +65,14 @@ export class UserService {
 
   public update = async (userDTO: UserDTO): Promise<UserDTO | any> => {
     try {
+      if (userDTO.password) {
+        userDTO.password = await transformPassword(userDTO.password);
+      }
+
       const userToUpdate = UserMapper.fromDTOtoEntity(userDTO);
       const userUpdated = await this.userRepository.save(userToUpdate);
+
+      delete userUpdated.password;
 
       return UserMapper.fromEntityToDTO(userUpdated);
     } catch (error) {

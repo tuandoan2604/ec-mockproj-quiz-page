@@ -5,8 +5,8 @@ import { UserDTO } from "../services/dtos/user.dto";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 import { isNumber } from "../utils/validation/is-number.util";
-import { isUsernameValid } from '../utils/validation/is-username-val.util';
-import { isPasswordValid } from '../utils/validation/is-password-val.util';
+import { isUsernameValid } from "../utils/validation/is-username-val.util";
+import { isPasswordValid } from "../utils/validation/is-password-val.util";
 
 export class UserController {
   public readonly router: Router;
@@ -78,28 +78,35 @@ export class UserController {
 
       if (!isPasswordValid(userDTO.password)) {
         dataResponse.statusCode = 400;
-        dataResponse.message = "Invalid password! Password must contain between 5-20 characters and no spaces.";
+        dataResponse.message =
+          "Invalid password! Password must contain between 5-20 characters and no spaces.";
       }
 
       if (!isUsernameValid(userDTO.username)) {
         dataResponse.statusCode = 400;
-        dataResponse.message = "Invalid username! accepts 4 to 15 characters with any lower case character, digit or special symbol “_-” only.";
+        dataResponse.message =
+          "Invalid username! accepts 4 to 15 characters with any lower case character, digit or special symbol “_-” only.";
       }
 
-      if (isUsernameValid(userDTO.username) && isPasswordValid(userDTO.password)) {
+      if (
+        isUsernameValid(userDTO.username) &&
+        isPasswordValid(userDTO.password)
+      ) {
         const userCreated = await this.userService.create(userDTO);
         if (userCreated === "Username is already in use") {
           dataResponse.statusCode = 400;
           dataResponse.message = "Username is already in use";
           return res.status(dataResponse.statusCode).send(dataResponse);
         } else {
-          dataResponse = userCreated;
+          console.log("Success");
+          dataResponse.statusCode = 201;
+          dataResponse.message = "Successfully created";
+          dataResponse.result = userCreated;
           return res.status(dataResponse.statusCode).send(dataResponse);
         }
       }
 
       return res.status(dataResponse.statusCode).send(dataResponse);
-
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
@@ -115,11 +122,68 @@ export class UserController {
     let dataResponse = new DataResponse(null, 200, "Successfully updated");
     try {
       const userDTO: UserDTO = req.body;
-      const userUpdated = await this.userService.update(userDTO);
 
-      dataResponse.result = userUpdated;
+      if (!isNumber(userDTO.id)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid ID! ID Must be a number";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
 
-      return res.status(dataResponse.statusCode).send(dataResponse);
+      // Neu update password => Check password valid
+      if (userDTO.password && !isPasswordValid(userDTO.password)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message =
+          "Invalid password! Password must contain between 5-20 characters and no spaces.";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      if (!isUsernameValid(userDTO.username)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message =
+          "Invalid username! accepts 4 to 15 characters with any lower case character, digit or special symbol “_-” only.";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      const userFindById = await this.userService.getUserById(
+        Number(userDTO.id)
+      );
+
+      if (!userFindById) {
+        dataResponse.statusCode = 404;
+        dataResponse.message = "User not found";
+
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      // Nếu username không thay đổi
+      if (userDTO.username === userFindById.username) {
+        // => Update user
+        const userUpdated = await this.userService.update(userDTO);
+
+        dataResponse.statusCode = 200;
+        dataResponse.message = "Successfully updated";
+        dataResponse.result = userUpdated;
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      } else {        // Nếu thay đổi username
+        // => Check username exist
+        const userFindByUsername = await this.userService.getUserByUsername(
+          userDTO.username
+        );
+
+        // Nếu username đã tồn tại
+        if (userFindByUsername) {
+          dataResponse.statusCode = 400;
+          dataResponse.message = "Username is already in use";
+          return res.status(dataResponse.statusCode).send(dataResponse);
+        } else { // Nếu username chưa tồn tại
+        // => Update user
+        const userUpdated = await this.userService.update(userDTO);
+
+        dataResponse.statusCode = 200;
+        dataResponse.message = "Successfully updated";
+        dataResponse.result = userUpdated;
+        }
+      }
     } catch (error) {
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
