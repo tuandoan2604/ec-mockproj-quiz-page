@@ -227,16 +227,16 @@ export class UserController {
    * Configure the routes of controller
    */
   public routes() {
-    // this.router.get("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getAllUser);
-    // this.router.get("/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getUserById);
-    // this.router.post("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.create);
-    // this.router.put("/", [checkJwt, checkRole(["ROLE_ADMIN"])], this.update);
-    // this.router.delete("/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.delete);
+    this.router.get("/get-all", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getAllUser);
+    this.router.get("/get-one/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getUserById);
+    this.router.post("create", [checkJwt, checkRole(["ROLE_ADMIN"])], this.create);
+    this.router.put("/update", [checkJwt, checkRole(["ROLE_ADMIN"])], this.update);
+    this.router.delete("/delete/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.delete);
 
-    this.router.get("/get-all", this.getAllUser);
-    this.router.get("/get-one/:id", this.getUserById);
-    this.router.post("/create", this.create);
-    this.router.put("/update", this.update);
-    this.router.delete("/delete/:id", this.delete);
+    // this.router.get("/get-all", this.getAllUser);
+    // this.router.get("/get-one/:id", this.getUserById);
+    // this.router.post("/create", this.create);
+    // this.router.put("/update", this.update);
+    // this.router.delete("/delete/:id", this.delete);
   }
 }
