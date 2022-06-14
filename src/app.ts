@@ -9,6 +9,7 @@ import { AuthController } from "./controllers/auth.controller";
 import { UserController } from "./controllers/user.controller";
 import { QuizController } from "./controllers/quiz.controller";
 import { QuestionController } from "./controllers/question.controller";
+import { AnswerController } from "./controllers/answer.controller";
 
 
 class App {
@@ -16,7 +17,8 @@ class App {
   private UserController: UserController;
   private QuizController: QuizController;
   private QuestionController: QuestionController;
-
+  private AnswerController: AnswerController;
+  
   private app: express.Application;
 
   constructor() {
@@ -55,12 +57,14 @@ class App {
     this.UserController = new UserController();
     this.QuizController = new QuizController();
     this.QuestionController = new QuestionController();
-
+    this.AnswerController = new AnswerController();
+    
     // Configure the new routes of the controller
     this.app.use(`/api/auth/`, this.AuthController.router);
     this.app.use(`/api/user/`, this.UserController.router);
     this.app.use(`/api/quiz/`, this.QuizController.router);
     this.app.use(`/api/question/`, this.QuestionController.router);
+    this.app.use(`/api/answer/`, this.AnswerController.router);
   }
 
   /**

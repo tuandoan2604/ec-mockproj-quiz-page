@@ -1,4 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { AnswerEntity } from "./answer.entity";
 import { BaseEntity } from "./base/base.entity";
 import { QuizEntity } from "./quiz.entity";
 
@@ -13,4 +14,7 @@ export class QuestionEntity extends BaseEntity {
   @ManyToOne(() => QuizEntity)
   @JoinColumn({ name: "quizId" })
   quiz?: QuizEntity;
+
+  @OneToMany(() => AnswerEntity, (answer) => answer.question)
+  answers?: AnswerEntity[];
 }
