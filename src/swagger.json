@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "(Quiz) Server API - Swagger",
-    "description": "",
+    "description": "Account Admin: admin - 12345 <br /> <br /> Account User: user - 12345",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
