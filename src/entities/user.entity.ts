@@ -1,4 +1,3 @@
-import { Exclude } from "class-transformer";
 import { Entity, Column, OneToMany } from "typeorm";
 import { BaseEntity } from "./base/base.entity";
 import { QuizEntity } from "./quiz.entity";
@@ -11,7 +10,6 @@ export class UserEntity extends BaseEntity {
     type: "varchar",
     select: false,
   })
-  @Exclude()
   password: string;
   @Column({ nullable: true })
   fullName?: string;

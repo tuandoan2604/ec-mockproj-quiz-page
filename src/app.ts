@@ -1,14 +1,19 @@
 import express, { Request, Response } from "express";
-import { UserController } from "./controllers/user.controller";
 import { AppDataSource } from "./data-source";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDoccument from "./swagger.json";
 import bodyParser from "body-parser";
+
+// Import Controller
 import { AuthController } from "./controllers/auth.controller";
+import { UserController } from "./controllers/user.controller";
+import { QuizController } from "./controllers/quiz.controller";
 
 class App {
-  private UserController: UserController;
   private AuthController: AuthController;
+  private UserController: UserController;
+  private QuizController: QuizController;
+
   private app: express.Application;
 
   constructor() {
@@ -43,12 +48,14 @@ class App {
       res.send("My Quiz!");
     });
 
-    this.UserController = new UserController();
     this.AuthController = new AuthController();
+    this.UserController = new UserController();
+    this.QuizController = new QuizController();
 
     // Configure the new routes of the controller
     this.app.use(`/api/auth/`, this.AuthController.router); 
     this.app.use(`/api/user/`, this.UserController.router); 
+    this.app.use(`/api/quiz/`, this.QuizController.router); 
   }
 
   /**

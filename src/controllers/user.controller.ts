@@ -74,7 +74,9 @@ export class UserController {
   ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 201, "Successfully created");
     try {
+      const userReqDTO: UserDTO = res?.locals?.userReq;
       const userDTO: UserDTO = req.body;
+      userDTO.createdBy = userReqDTO.username;
 
       if (!isPasswordValid(userDTO.password)) {
         dataResponse.statusCode = 400;
@@ -98,7 +100,6 @@ export class UserController {
           dataResponse.message = "Username is already in use";
           return res.status(dataResponse.statusCode).send(dataResponse);
         } else {
-          console.log("Success");
           dataResponse.statusCode = 201;
           dataResponse.message = "Successfully created";
           dataResponse.result = userCreated;
@@ -121,7 +122,9 @@ export class UserController {
   ): Promise<UserDTO | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully updated");
     try {
+      const userReqDTO: UserDTO = res?.locals?.userReq;
       const userDTO: UserDTO = req.body;
+      userDTO.lastModifiedBy = userReqDTO.username;
 
       if (!isNumber(userDTO.id)) {
         dataResponse.statusCode = 400;
@@ -164,7 +167,8 @@ export class UserController {
         dataResponse.message = "Successfully updated";
         dataResponse.result = userUpdated;
         return res.status(dataResponse.statusCode).send(dataResponse);
-      } else {        // Nếu thay đổi username
+      } else {
+        // Nếu thay đổi username
         // => Check username exist
         const userFindByUsername = await this.userService.getUserByUsername(
           userDTO.username
@@ -175,13 +179,14 @@ export class UserController {
           dataResponse.statusCode = 400;
           dataResponse.message = "Username is already in use";
           return res.status(dataResponse.statusCode).send(dataResponse);
-        } else { // Nếu username chưa tồn tại
-        // => Update user
-        const userUpdated = await this.userService.update(userDTO);
+        } else {
+          // Nếu username chưa tồn tại
+          // => Update user
+          const userUpdated = await this.userService.update(userDTO);
 
-        dataResponse.statusCode = 200;
-        dataResponse.message = "Successfully updated";
-        dataResponse.result = userUpdated;
+          dataResponse.statusCode = 200;
+          dataResponse.message = "Successfully updated";
+          dataResponse.result = userUpdated;
         }
       }
     } catch (error) {
@@ -227,11 +232,31 @@ export class UserController {
    * Configure the routes of controller
    */
   public routes() {
-    this.router.get("/get-all", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getAllUser);
-    this.router.get("/get-one/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.getUserById);
-    this.router.post("create", [checkJwt, checkRole(["ROLE_ADMIN"])], this.create);
-    this.router.put("/update", [checkJwt, checkRole(["ROLE_ADMIN"])], this.update);
-    this.router.delete("/delete/:id", [checkJwt, checkRole(["ROLE_ADMIN"])], this.delete);
+    this.router.get(
+      "/get-all",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.getAllUser
+    );
+    this.router.get(
+      "/get-one/:id",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.getUserById
+    );
+    this.router.post(
+      "/create",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.create
+    );
+    this.router.put(
+      "/update",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.update
+    );
+    this.router.delete(
+      "/delete/:id",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.delete
+    );
 
     // this.router.get("/get-all", this.getAllUser);
     // this.router.get("/get-one/:id", this.getUserById);

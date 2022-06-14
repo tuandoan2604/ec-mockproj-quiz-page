@@ -1,4 +1,3 @@
-import { Exclude } from "class-transformer";
 import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
 import { BaseEntity } from "./base/base.entity";
 import { UserEntity } from "./user.entity";
@@ -8,8 +7,8 @@ export class QuizEntity extends BaseEntity {
   @Column({ unique: true })
   code: string;
 
-  @Column({ unique: true })
-  name: string;
+  @Column()
+  name?: string;
 
   @ManyToOne(() => UserEntity)
   @JoinColumn({ name: "creator" })

@@ -14,7 +14,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
         statusCode: 401,
         message: "Unauthorized",
       })
-      .json();
 
     return;
   }
@@ -33,7 +32,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
         statusCode: 401,
         message: "Unauthorized",
       })
-      .json();
 
     return;
   }

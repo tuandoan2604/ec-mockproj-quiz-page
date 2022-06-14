@@ -15,27 +15,22 @@ export const checkRole = (roles: Array<string>) => {
       userEntity = await userRepository.findOne({ where: { id } });
     } catch (error) {
       console.log(error);
-      res
-        .status(401)
-        .send({
-          statusCode: 401,
-          message: "Unauthorized",
-        })
-        .json();
+      res.status(401).send({
+        statusCode: 401,
+        message: "Unauthorized",
+      });
     }
 
     //Check if array of authorized roles includes the user's role
     if (roles.indexOf(userEntity.role) > -1) {
+      res.locals.userReq = userEntity;
       next();
     } else {
-      res
-        .status(403)
-        .send({
-          statusCode: 403,
-          message: "Forbidden resource",
-          error: "Forbidden",
-        })
-        .json();
+      res.status(403).send({
+        statusCode: 403,
+        message: "Forbidden resource",
+        error: "Forbidden",
+      });
 
       return;
     }
