@@ -78,4 +78,32 @@ export class AnswerService {
       return;
     }
   };
+
+  public createMutiple = async (
+    answerDTOs: AnswerDTO[]
+  ): Promise<AnswerDTO[] | any> => {
+    try {
+      const answersEntity: AnswerEntity[] = [];
+
+      answerDTOs.forEach((answerDTO: AnswerDTO) =>
+        answersEntity.push(AnswerMapper.fromEntityToDTO(answerDTO))
+      );
+
+      const answersCreated = await this.answerRepository.saveMany(answersEntity);
+
+      if (!answersCreated) {
+        return;
+      }
+
+      const answersDTO: AnswerDTO[] = [];
+
+      answersCreated.forEach((answer: AnswerEntity) =>
+        answersDTO.push(AnswerMapper.fromEntityToDTO(answer))
+      );
+
+      return answerDTOs;
+    } catch (error) {
+      return;
+    }
+  };
 }

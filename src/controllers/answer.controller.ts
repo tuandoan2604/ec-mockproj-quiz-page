@@ -171,6 +171,40 @@ export class AnswerController {
     }
   };
 
+  public createMutiple = async (
+    req: Request,
+    res: Response
+  ): Promise<AnswerDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 201, "Successfully created");
+    try {
+      const userDTO: UserDTO = res?.locals?.userReq;
+      const answerDTOs: AnswerDTO[] = req.body.map((answerDTO: AnswerDTO[]) => {
+        return { ...answerDTO, createdBy: userDTO?.username };
+      });
+      
+      const answersCreated = await this.answerService.createMutiple(
+        answerDTOs
+      );
+
+      if (!answersCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      dataResponse.statusCode = 201;
+      dataResponse.message = "Successfully created";
+      dataResponse.result = answersCreated;
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
   /**
    * Configure the routes of controller
    */
