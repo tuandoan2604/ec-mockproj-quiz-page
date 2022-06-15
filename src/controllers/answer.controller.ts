@@ -234,6 +234,11 @@ export class AnswerController {
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.delete
     );
+    this.router.post(
+      "/create/mutiple-answer",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.createMutiple
+    );
 
     // this.router.get("/get-all", this.getAllAnswer);
     // this.router.get("/get-one/:id", this.getAnswerById);
