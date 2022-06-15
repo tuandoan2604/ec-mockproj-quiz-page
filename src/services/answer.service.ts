@@ -1,3 +1,4 @@
+import { AnswerEntity } from "../entities/answer.entity";
 import { AnswerRepository } from "../repositories/answer.repository";
 import { AnswerDTO } from "./dtos/answer.dto";
 import { AnswerMapper } from "./mappers/answer.mapper";
@@ -7,14 +8,14 @@ export class AnswerService {
 
   public getAllAnswer = async (): Promise<AnswerDTO[] | any> => {
     try {
-      const answers = await this.answerRepository.find();
-      if (!answers) {
+      const answersEntity = await this.answerRepository.find();
+      if (!answersEntity) {
         return [];
       }
       
       const answersDTO: AnswerDTO[] = [];
 
-      answers.forEach((answer: AnswerDTO) =>
+      answersEntity.forEach((answer: AnswerEntity) =>
         answersDTO.push(AnswerMapper.fromEntityToDTO(answer))
       );
 

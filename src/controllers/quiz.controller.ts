@@ -80,6 +80,12 @@ export class QuizController {
       
       const quizCreated = await this.quizService.create(quizDTO);
 
+      if (!quizCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
       if (quizCreated === "Quiz code already exists") {
         dataResponse.statusCode = 400;
         dataResponse.message = "Quiz code already exists";

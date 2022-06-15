@@ -2,20 +2,21 @@ import { UserRepository } from "../repositories/user.repository";
 import { UserDTO } from "./dtos/user.dto";
 import { UserMapper } from "./mappers/user.mapper";
 import { transformPassword } from "../utils/security/password.util";
+import { UserEntity } from "../entities/user.entity";
 
 export class UserService {
   constructor(private readonly userRepository = new UserRepository()) {}
 
   public getAllUser = async (): Promise<UserDTO[] | any> => {
     try {
-      const users = await this.userRepository.find();
-      if (!users) {
+      const usersEntity = await this.userRepository.find();
+      if (!usersEntity) {
         return [];
       }
       
       const usersDTO: UserDTO[] = [];
 
-      users.forEach((user: UserDTO) =>
+      usersEntity.forEach((user: UserEntity) =>
         usersDTO.push(UserMapper.fromEntityToDTO(user))
       );
 

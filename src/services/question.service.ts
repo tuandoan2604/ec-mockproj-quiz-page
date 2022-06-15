@@ -1,3 +1,4 @@
+import { QuestionEntity } from "../entities/question.entity";
 import { QuestionRepository } from "../repositories/question.repository";
 import { QuestionDTO } from "./dtos/question.dto";
 import { QuestionMapper } from "./mappers/question.mapper";
@@ -7,14 +8,14 @@ export class QuestionService {
 
   public getAllQuestion = async (): Promise<QuestionDTO[] | any> => {
     try {
-      const questions = await this.questionRepository.find();
-      if (!questions) {
+      const questionsEntity = await this.questionRepository.find();
+      if (!questionsEntity) {
         return [];
       }
-      
+
       const questionsDTO: QuestionDTO[] = [];
 
-      questions.forEach((question: QuestionDTO) =>
+      questionsEntity.forEach((question: QuestionEntity) =>
         questionsDTO.push(QuestionMapper.fromEntityToDTO(question))
       );
 
@@ -73,6 +74,34 @@ export class QuestionService {
       );
 
       return QuestionMapper.fromEntityToDTO(questionDeleted);
+    } catch (error) {
+      return;
+    }
+  };
+
+  public createMutiple = async (
+    questionDTOs: QuestionDTO[]
+  ): Promise<QuestionDTO[] | any> => {
+    try {
+      const questionsEntity: QuestionEntity[] = [];
+
+      questionDTOs.forEach((questionDTO: QuestionDTO) =>
+        questionsEntity.push(QuestionMapper.fromEntityToDTO(questionDTO))
+      );
+
+      const questionsCreated = await this.questionRepository.saveMany(questionsEntity);
+
+      if (!questionsCreated) {
+        return;
+      }
+
+      const questionsDTO: QuestionDTO[] = [];
+
+      questionsCreated.forEach((question: QuestionEntity) =>
+        questionsDTO.push(QuestionMapper.fromEntityToDTO(question))
+      );
+
+      return questionDTOs;
     } catch (error) {
       return;
     }

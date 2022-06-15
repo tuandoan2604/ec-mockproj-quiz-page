@@ -79,9 +79,16 @@ export class QuestionController {
 
       const questionCreated = await this.questionService.create(questionDTO);
 
+      if (!questionCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
       dataResponse.statusCode = 201;
       dataResponse.message = "Successfully created";
       dataResponse.result = questionCreated;
+
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
       dataResponse.statusCode = 500;
@@ -165,6 +172,40 @@ export class QuestionController {
     }
   };
 
+  public createMutiple = async (
+    req: Request,
+    res: Response
+  ): Promise<QuestionDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 201, "Successfully created");
+    try {
+      const userDTO: UserDTO = res?.locals?.userReq;
+      const questionDTOs: QuestionDTO[] = req.body.map((questionDTO: QuestionDTO[]) => {
+        return { ...questionDTO, createdBy: userDTO?.username };
+      });
+      
+      const questionsCreated = await this.questionService.createMutiple(
+        questionDTOs
+      );
+
+      if (!questionsCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      dataResponse.statusCode = 201;
+      dataResponse.message = "Successfully created";
+      dataResponse.result = questionsCreated;
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
   /**
    * Configure the routes of controller
    */
@@ -193,6 +234,11 @@ export class QuestionController {
       "/delete/:id",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.delete
+    );
+    this.router.post(
+      "/create/mutiple-question",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.createMutiple
     );
 
     // this.router.get("/get-all", this.getAllQuestion);

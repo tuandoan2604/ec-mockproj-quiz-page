@@ -1,3 +1,4 @@
+import { QuizEntity } from "../entities/quiz.entity";
 import { QuizRepository } from "../repositories/quiz.repository";
 import { QuizDTO } from "./dtos/quiz.dto";
 import { QuizMapper } from "./mappers/quiz.mapper";
@@ -7,14 +8,14 @@ export class QuizService {
 
   public getAllQuiz = async (): Promise<QuizDTO[] | any> => {
     try {
-      const quizs = await this.quizRepository.find();
-      if (!quizs) {
+      const quizsEntity = await this.quizRepository.find();
+      if (!quizsEntity) {
         return [];
       }
 
       const quizsDTO: QuizDTO[] = [];
 
-      quizs.forEach((quiz: QuizDTO) =>
+      quizsEntity.forEach((quiz: QuizEntity) =>
         quizsDTO.push(QuizMapper.fromEntityToDTO(quiz))
       );
 

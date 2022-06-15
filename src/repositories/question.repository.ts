@@ -53,5 +53,16 @@ export class QuestionRepository {
       return;
     }
   }
+
+  async saveMany(questionsEntity: QuestionEntity[]): Promise<QuestionEntity[] | any> {
+    try {
+      const questionsCreated = await this.questionRepository.save(questionsEntity);
+
+      return questionsCreated;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
   
 }

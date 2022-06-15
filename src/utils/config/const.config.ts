@@ -1,1 +1,1 @@
-export const expiresIn_Token = '1h';
+export const expiresIn_Token = '3h';

@@ -79,6 +79,12 @@ export class AnswerController {
 
       const answerCreated = await this.answerService.create(answerDTO);
 
+      if (!answerCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
       dataResponse.statusCode = 201;
       dataResponse.message = "Successfully created";
       dataResponse.result = answerCreated;
