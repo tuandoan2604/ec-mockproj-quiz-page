@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
-import { AnswerSummaryEntity } from "./answer-summary.entitty";
+import { AnswerSummaryEntity } from "./answer-summary.entity";
 import { BaseEntity } from "./base/base.entity";
 import { QuizSummaryEntity } from "./quiz-summary.entity";
 

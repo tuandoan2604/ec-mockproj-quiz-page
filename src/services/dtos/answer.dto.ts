@@ -2,7 +2,7 @@ import { BaseDTO } from "./base/base.dto";
 import { QuestionDTO } from "./question.dto";
 
 /**
- * An Question DTO object.
+ * An Answer DTO object.
  */
 export class AnswerDTO extends BaseDTO {
   name: string;
