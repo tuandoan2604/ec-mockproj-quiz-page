@@ -139,6 +139,8 @@ export class QuizSummaryRepository {
                 return {
                   ...questionSummary,
                   quizSummary: quizSummaryCreated,
+                  user: user,
+                  createdBy: user.username,
                 };
               }
             );
@@ -146,6 +148,7 @@ export class QuizSummaryRepository {
             // Create Question List
             for (let questionSummary of questionsSummaryEntity) {
               // Create Single Question
+              delete questionSummary.id;
               let questionSummaryCreated = await transactionalEntityManager
                 .getRepository(QuestionSummaryEntity)
                 .save(questionSummary);
@@ -155,10 +158,13 @@ export class QuizSummaryRepository {
                 (answerSummary: any) => {
                   return {
                     ...answerSummary,
+                    id: null,
                     isSelected: false,
                     questionSummary: {
                       id: questionSummaryCreated.id,
                     },
+                    user: user,
+                    createdBy: user.username,
                   };
                 }
               );

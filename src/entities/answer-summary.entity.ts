@@ -1,13 +1,16 @@
 import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
 import { BaseEntity } from "./base/base.entity";
 import { QuestionSummaryEntity } from "./question-summary.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity("answer_summary")
 export class AnswerSummaryEntity extends BaseEntity {
   @Column()
   name: string;
   
-  @Column()
+  @Column({
+    select: false,
+  })
   isCorrect: boolean;
 
   @Column()
@@ -16,4 +19,8 @@ export class AnswerSummaryEntity extends BaseEntity {
   @ManyToOne(() => QuestionSummaryEntity)
   @JoinColumn({ name: "questionSummaryId" })
   questionSummary?: QuestionSummaryEntity;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: "userId" })
+  user?: UserEntity;
 }

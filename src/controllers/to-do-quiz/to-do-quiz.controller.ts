@@ -11,6 +11,8 @@ import { AnswerSummaryService } from "../../services/answer-summary.service";
 import { QuestionDTO } from "../../services/dtos/question.dto";
 import { AnswerDTO } from "../../services/dtos/answer.dto";
 import { ToDoQuizService } from "../../services/to-do-quiz/to-do-quiz.service";
+import { AnswerSummaryDTO } from "../../services/dtos/answer-summary.dto";
+import { isNumber } from "../../utils/validation/is-number.util";
 
 export class ToDoQuizController {
   public readonly router: Router;
@@ -35,7 +37,7 @@ export class ToDoQuizController {
     req: Request,
     res: Response
   ): Promise<QuizDTO[] | any> => {
-    let dataResponse = new DataResponse(null, 200, "Successfully");
+    let dataResponse = new DataResponse(null, 201, "Successfully Created");
     try {
       const userReqDTO: UserDTO = res?.locals?.userReq;
       const quizSampleData: any = req.body;
@@ -108,17 +110,52 @@ export class ToDoQuizController {
 
       // nếu tạo thành công quiz summary (nhận đc id đã tạo)
       if (quizSummaryIdCreated) {
-        const quizTodo = await this.quizSummaryService.getQuizSummaryById(quizSummaryIdCreated);
-        dataResponse.statusCode = 200,
-        dataResponse.message = "Successfully"
+        const quizTodo = await this.quizSummaryService.getQuizSummaryById(
+          quizSummaryIdCreated
+        );
+        (dataResponse.statusCode = 200),
+          (dataResponse.message = "Successfully");
         dataResponse.result = quizTodo;
       } else {
         dataResponse.statusCode = 500;
         dataResponse.message = "Internal server error";
-  
+
         return res.status(dataResponse.statusCode).send(dataResponse);
       }
-      
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      console.log(error);
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
+  public getAnswerToDo = async (
+    req: Request,
+    res: Response
+  ): Promise<AnswerSummaryDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 200, "Successfully");
+    try {
+      const userReqDTO: UserDTO = res?.locals?.userReq;
+
+      if (!isNumber(req.params.questionSummaryId)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid ID! ID Must be a number";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      const answersToDo = await this.answerSummaryService.getAnswersToDo(Number(req.params.questionSummaryId), Number(userReqDTO.id));
+
+      if (!answersToDo || answersToDo.length === 0) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Answers not found";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      dataResponse.result = answersToDo;
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
       console.log(error);
@@ -142,6 +179,11 @@ export class ToDoQuizController {
       "/start-quiz",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.startQuiz
+    );
+    this.router.get(
+      "/get-answer-to-do/:questionSummaryId",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.getAnswerToDo
     );
   }
 }

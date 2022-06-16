@@ -106,4 +106,22 @@ export class AnswerSummaryService {
       return;
     }
   };
+
+  public getAnswersToDo = async (questionSummaryId: number, userId: number): Promise<AnswerSummaryDTO[] | any> => {
+    try {
+      const answersSummaryFound = await this.answerSummaryRepository.findAnswersToDo(questionSummaryId, userId);
+
+      const answersSummaryDTO: AnswerSummaryDTO[] = [];
+
+      if (answersSummaryFound) {
+        answersSummaryFound.forEach((answerSummary: AnswerSummaryEntity) => {
+          answersSummaryDTO.push(AnswerSummaryMapper.fromEntityToDTO(answerSummary));
+        })
+      }
+
+      return answersSummaryDTO;
+    } catch (error) {
+      return;
+    }
+  }
 }

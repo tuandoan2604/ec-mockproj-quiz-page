@@ -35,7 +35,6 @@ export class QuizSummaryService {
   ): Promise<QuizSummaryDTO | any> => {
     try {
       const quizSummaryFound = await this.quizSummaryRepository.findOne(id);
-      console.log(quizSummaryFound);
 
       return QuizSummaryMapper.fromEntityToDTO(quizSummaryFound);
     } catch (error) {
@@ -115,7 +114,7 @@ export class QuizSummaryService {
 
       return quizToDoSummaryIdCreated;
     } catch (error) {
-      ReadableStreamDefaultController;
+      return;
     }
   };
   

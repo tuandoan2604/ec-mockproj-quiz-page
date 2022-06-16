@@ -1,6 +1,7 @@
 import { EntityRepository } from "typeorm";
 import { AnswerSummaryEntity } from "../entities/answer-summary.entity";
 import { AppDataSource } from "../data-source";
+import { UserEntity } from "../entities/user.entity";
 
 @EntityRepository()
 export class AnswerSummaryRepository {
@@ -61,6 +62,25 @@ export class AnswerSummaryRepository {
       return answerSummarysCreated;
     } catch (error) {
       console.log(error);
+      return;
+    }
+  }
+
+  async findAnswersToDo(questionSummaryId: number, userId: number): Promise<AnswerSummaryEntity[] | any> {
+    try {
+      const answersSummaryFound = await this.answerSummaryRepository.find({
+        where: {
+          questionSummary: {
+            id: questionSummaryId,
+          },
+          user: {
+            id: userId,
+          }
+        }
+      })
+
+      return answersSummaryFound;
+    } catch (error) {
       return;
     }
   }
