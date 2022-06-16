@@ -4,11 +4,16 @@ import { QuestionSummaryDTO } from "./dtos/question-summary.dto";
 import { QuestionSummaryMapper } from "./mappers/question-summary.mapper";
 
 export class QuestionSummaryService {
-  constructor(private readonly questionSummaryRepository = new QuestionSummaryRepository()) {}
+  constructor(
+    private readonly questionSummaryRepository = new QuestionSummaryRepository()
+  ) {}
 
-  public getAllQuestionSummary = async (): Promise<QuestionSummaryDTO[] | any> => {
+  public getAllQuestionSummary = async (): Promise<
+    QuestionSummaryDTO[] | any
+  > => {
     try {
-      const questionSummarysEntity = await this.questionSummaryRepository.find();
+      const questionSummarysEntity =
+        await this.questionSummaryRepository.find();
       if (!questionSummarysEntity) {
         return [];
       }
@@ -16,7 +21,9 @@ export class QuestionSummaryService {
       const questionSummarysDTO: QuestionSummaryDTO[] = [];
 
       questionSummarysEntity.forEach((questionSummary: QuestionSummaryEntity) =>
-        questionSummarysDTO.push(QuestionSummaryMapper.fromEntityToDTO(questionSummary))
+        questionSummarysDTO.push(
+          QuestionSummaryMapper.fromEntityToDTO(questionSummary)
+        )
       );
 
       return questionSummarysDTO;
@@ -25,9 +32,13 @@ export class QuestionSummaryService {
     }
   };
 
-  public getQuestionSummaryById = async (id: number): Promise<QuestionSummaryDTO | any> => {
+  public getQuestionSummaryById = async (
+    id: number
+  ): Promise<QuestionSummaryDTO | any> => {
     try {
-      const questionSummaryFound = await this.questionSummaryRepository.findOne(id);
+      const questionSummaryFound = await this.questionSummaryRepository.findOne(
+        id
+      );
 
       return QuestionSummaryMapper.fromEntityToDTO(questionSummaryFound);
     } catch (error) {
@@ -53,7 +64,8 @@ export class QuestionSummaryService {
     questionSummaryDTO: QuestionSummaryDTO
   ): Promise<QuestionSummaryDTO | any> => {
     try {
-      const questionSummaryToUpdate = QuestionSummaryMapper.fromDTOtoEntity(questionSummaryDTO);
+      const questionSummaryToUpdate =
+        QuestionSummaryMapper.fromDTOtoEntity(questionSummaryDTO);
       const questionSummaryUpdated = await this.questionSummaryRepository.save(
         questionSummaryToUpdate
       );
@@ -68,10 +80,10 @@ export class QuestionSummaryService {
     questionSummaryDTO: QuestionSummaryDTO
   ): Promise<QuestionSummaryDTO | any> => {
     try {
-      const questionSummaryToDelete = QuestionSummaryMapper.fromDTOtoEntity(questionSummaryDTO);
-      const questionSummaryDeleted = await this.questionSummaryRepository.delete(
-        questionSummaryToDelete
-      );
+      const questionSummaryToDelete =
+        QuestionSummaryMapper.fromDTOtoEntity(questionSummaryDTO);
+      const questionSummaryDeleted =
+        await this.questionSummaryRepository.delete(questionSummaryToDelete);
 
       return QuestionSummaryMapper.fromEntityToDTO(questionSummaryDeleted);
     } catch (error) {
@@ -86,22 +98,28 @@ export class QuestionSummaryService {
       const questionSummarysEntity: QuestionSummaryEntity[] = [];
 
       questionSummaryDTOs.forEach((questionSummaryDTO: QuestionSummaryDTO) =>
-        questionSummarysEntity.push(QuestionSummaryMapper.fromEntityToDTO(questionSummaryDTO))
+        questionSummarysEntity.push(
+          QuestionSummaryMapper.fromEntityToDTO(questionSummaryDTO)
+        )
       );
 
-      const questionSummarysCreated = await this.questionSummaryRepository.saveMany(questionSummarysEntity);
+      const questionSummarysCreated =
+        await this.questionSummaryRepository.saveMany(questionSummarysEntity);
 
       if (!questionSummarysCreated) {
         return;
       }
 
-      const questionSummarysDTO: QuestionSummaryDTO[] = [];
+      const questionSummarysCreatedDTO: QuestionSummaryDTO[] = [];
 
-      questionSummarysCreated.forEach((questionSummary: QuestionSummaryEntity) =>
-        questionSummarysDTO.push(QuestionSummaryMapper.fromEntityToDTO(questionSummary))
+      questionSummarysCreated.forEach(
+        (questionSummary: QuestionSummaryEntity) =>
+          questionSummarysCreatedDTO.push(
+            QuestionSummaryMapper.fromEntityToDTO(questionSummary)
+          )
       );
 
-      return questionSummaryDTOs;
+      return questionSummarysCreatedDTO;
     } catch (error) {
       return;
     }

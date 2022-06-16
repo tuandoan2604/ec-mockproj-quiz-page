@@ -201,6 +201,41 @@ export class QuizController {
     }
   };
 
+  public createMutiple = async (
+    req: Request,
+    res: Response
+  ): Promise<QuizDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 201, "Successfully created");
+    try {
+      const userDTO: UserDTO = res?.locals?.userReq;
+      const quizDTOs: QuizDTO[] = req.body.map((quizDTO: QuizDTO[]) => {
+        return { ...quizDTO, createdBy: userDTO?.username };
+      });
+      
+      const quizsCreated = await this.quizService.createMutiple(
+        quizDTOs
+      );
+
+      if (!quizsCreated) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Bad request";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      dataResponse.statusCode = 201;
+      dataResponse.message = "Successfully created";
+      dataResponse.result = quizsCreated;
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
+
   /**
    * Configure the routes of controller
    */
@@ -229,6 +264,11 @@ export class QuizController {
       "/delete/:id",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.delete
+    );
+    this.router.post(
+      "/create/mutiple-quiz",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.createMutiple
     );
 
     // this.router.get("/get-all", this.getAllQuiz);

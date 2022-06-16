@@ -64,4 +64,15 @@ export class QuizRepository {
     }
   }
 
+  async saveMany(quizsEntity: QuizEntity[]): Promise<QuizEntity[] | any> {
+    try {
+      const quizsCreated = await this.quizRepository.save(quizsEntity);
+
+      return quizsCreated;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
+
 }

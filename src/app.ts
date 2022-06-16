@@ -10,6 +10,7 @@ import { UserController } from "./controllers/user.controller";
 import { QuizController } from "./controllers/quiz.controller";
 import { QuestionController } from "./controllers/question.controller";
 import { AnswerController } from "./controllers/answer.controller";
+import { ToDoQuizController } from "./controllers/to-do-quiz/to-do-quiz.controller";
 
 
 class App {
@@ -18,6 +19,7 @@ class App {
   private QuizController: QuizController;
   private QuestionController: QuestionController;
   private AnswerController: AnswerController;
+  private ToDoQuizController: ToDoQuizController;
   
   private app: express.Application;
 
@@ -58,6 +60,7 @@ class App {
     this.QuizController = new QuizController();
     this.QuestionController = new QuestionController();
     this.AnswerController = new AnswerController();
+    this.ToDoQuizController = new ToDoQuizController();
     
     // Configure the new routes of the controller
     this.app.use(`/api/auth/`, this.AuthController.router);
@@ -65,6 +68,7 @@ class App {
     this.app.use(`/api/quiz/`, this.QuizController.router);
     this.app.use(`/api/question/`, this.QuestionController.router);
     this.app.use(`/api/answer/`, this.AnswerController.router);
+    this.app.use(`/api/to-do-quiz/`, this.ToDoQuizController.router);
   }
 
   /**

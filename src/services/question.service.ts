@@ -89,19 +89,21 @@ export class QuestionService {
         questionsEntity.push(QuestionMapper.fromEntityToDTO(questionDTO))
       );
 
-      const questionsCreated = await this.questionRepository.saveMany(questionsEntity);
+      const questionsCreated = await this.questionRepository.saveMany(
+        questionsEntity
+      );
 
       if (!questionsCreated) {
         return;
       }
 
-      const questionsDTO: QuestionDTO[] = [];
+      const questionsCreatedDTO: QuestionDTO[] = [];
 
-      questionsCreated.forEach((question: QuestionEntity) =>
-        questionsDTO.push(QuestionMapper.fromEntityToDTO(question))
-      );
+      questionsCreated.forEach((question: QuestionEntity) => {
+        questionsCreatedDTO.push(QuestionMapper.fromEntityToDTO(question));
+      });
 
-      return questionDTOs;
+      return questionsCreatedDTO;
     } catch (error) {
       return;
     }

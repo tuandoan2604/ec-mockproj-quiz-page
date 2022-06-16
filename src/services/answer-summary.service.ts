@@ -95,13 +95,13 @@ export class AnswerSummaryService {
         return;
       }
 
-      const answerSummarysDTO: AnswerSummaryDTO[] = [];
+      const answerSummarysCreatedDTO: AnswerSummaryDTO[] = [];
 
       answerSummarysCreated.forEach((answerSummary: AnswerSummaryEntity) =>
-        answerSummarysDTO.push(AnswerSummaryMapper.fromEntityToDTO(answerSummary))
+      answerSummarysCreatedDTO.push(AnswerSummaryMapper.fromEntityToDTO(answerSummary))
       );
 
-      return answerSummaryDTOs;
+      return answerSummarysCreatedDTO;
     } catch (error) {
       return;
     }

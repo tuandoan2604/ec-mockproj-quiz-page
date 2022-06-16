@@ -1,0 +1,30 @@
+[
+  {
+    "name": "7/1917",
+    "isCorrect": false,
+    "question": {
+      "id": 1
+    }
+  },
+  {
+    "name": "7/1918",
+    "isCorrect": false,
+    "question": {
+      "id": 1
+    }
+  },
+  {
+    "name": "7/1919",
+    "isCorrect": false,
+    "question": {
+      "id": 1
+    }
+  },
+  {
+    "name": "7/1920",
+    "isCorrect": true,
+    "question": {
+      "id": 1
+    }
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "1911 đến 1930",
+    "isCorrect": false,
+    "question": {
+      "id": 4
+    }
+  },
+  {
+    "name": "1911 đến 1920",
+    "isCorrect": true,
+    "question": {
+      "id": 4
+    }
+  },
+  {
+    "name": "1911 đến 1935",
+    "isCorrect": false,
+    "question": {
+      "id": 4
+    }
+  },
+  {
+    "name": "1930 đến 1945",
+    "isCorrect": false,
+    "question": {
+      "id": 4
+    }
+  }
+]

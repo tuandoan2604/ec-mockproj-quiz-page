@@ -95,13 +95,13 @@ export class AnswerService {
         return;
       }
 
-      const answersDTO: AnswerDTO[] = [];
+      const answersCreatedDTO: AnswerDTO[] = [];
 
       answersCreated.forEach((answer: AnswerEntity) =>
-        answersDTO.push(AnswerMapper.fromEntityToDTO(answer))
+      answersCreatedDTO.push(AnswerMapper.fromEntityToDTO(answer))
       );
 
-      return answerDTOs;
+      return answersCreatedDTO;
     } catch (error) {
       return;
     }

@@ -886,6 +886,83 @@
         }
       }
     },
+    "/api/quiz/create/mutiple-quiz": {
+      "post": {
+        "tags": ["Quiz Controller"],
+        "summary": "Create mutiple quiz",
+        "operationId": "createQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/api/quiz/update": {
       "put": {
         "tags": ["Quiz Controller"],
@@ -1218,6 +1295,83 @@
         }
       }
     },
+    "/api/question/create/mutiple-question": {
+      "post": {
+        "tags": ["Question Controller"],
+        "summary": "Create mutiple question",
+        "operationId": "createQuestion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuestionDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/api/question/update": {
       "put": {
         "tags": ["Question Controller"],
@@ -1474,6 +1628,83 @@
       "post": {
         "tags": ["Answer Controller"],
         "summary": "Create answer",
+        "operationId": "createAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "AnswerDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/create/mutiple-answer": {
+      "post": {
+        "tags": ["Answer Controller"],
+        "summary": "Create mutiple answer",
         "operationId": "createAnswer",
         "security": [
           {

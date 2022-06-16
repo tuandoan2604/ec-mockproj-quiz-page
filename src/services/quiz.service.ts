@@ -47,9 +47,7 @@ export class QuizService {
 
   public create = async (quizDTO: QuizDTO): Promise<QuizDTO | any> => {
     try {
-      const quizFind = await this.quizRepository.findByCode(
-        quizDTO.code
-      );
+      const quizFind = await this.quizRepository.findByCode(quizDTO.code);
 
       if (quizFind) {
         return "Quiz code already exists";
@@ -82,6 +80,34 @@ export class QuizService {
       const quizDeleted = await this.quizRepository.delete(quizToDelete);
 
       return QuizMapper.fromEntityToDTO(quizDeleted);
+    } catch (error) {
+      return;
+    }
+  };
+
+  public createMutiple = async (
+    quizDTOs: QuizDTO[]
+  ): Promise<QuizDTO[] | any> => {
+    try {
+      const quizsEntity: QuizEntity[] = [];
+
+      quizDTOs.forEach((quizDTO: QuizDTO) =>
+        quizsEntity.push(QuizMapper.fromEntityToDTO(quizDTO))
+      );
+
+      const quizsCreated = await this.quizRepository.saveMany(quizsEntity);
+
+      if (!quizsCreated) {
+        return;
+      }
+
+      const quizsCreatedDTO: QuizDTO[] = [];
+
+      quizsCreated.forEach((quiz: QuizEntity) =>
+        quizsCreatedDTO.push(QuizMapper.fromEntityToDTO(quiz))
+      );
+
+      return quizsCreatedDTO;
     } catch (error) {
       return;
     }
