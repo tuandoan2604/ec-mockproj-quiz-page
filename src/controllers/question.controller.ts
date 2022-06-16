@@ -5,7 +5,7 @@ import { QuestionDTO } from "../services/dtos/question.dto";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 import { isNumber } from "../utils/validation/is-number.util";
-import { UserDTO } from "src/services/dtos/user.dto";
+import { UserDTO } from "../services/dtos/user.dto";
 
 export class QuestionController {
   public readonly router: Router;
@@ -29,6 +29,7 @@ export class QuestionController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -60,6 +61,7 @@ export class QuestionController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -91,6 +93,7 @@ export class QuestionController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -132,6 +135,7 @@ export class QuestionController {
       dataResponse.result = questionUpdated;
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -165,6 +169,7 @@ export class QuestionController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -199,6 +204,7 @@ export class QuestionController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 

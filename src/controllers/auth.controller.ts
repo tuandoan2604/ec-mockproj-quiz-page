@@ -39,6 +39,7 @@ export class AuthController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -75,6 +76,7 @@ export class AuthController {
       }
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 

@@ -30,6 +30,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -61,6 +62,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -109,6 +111,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -190,6 +193,7 @@ export class UserController {
         }
       }
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -221,6 +225,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 

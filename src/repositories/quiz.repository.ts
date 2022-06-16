@@ -1,13 +1,17 @@
-import { EntityRepository } from "typeorm";
+import { DataSource, EntityRepository } from "typeorm";
 import { QuizEntity } from "../entities/quiz.entity";
 import { AppDataSource } from "../data-source";
+import { getManager } from "typeorm";
+import { QuestionEntity } from "../entities/question.entity";
+import { AnswerEntity } from "../entities/answer.entity";
+import { UserDTO } from "../services/dtos/user.dto";
 
 @EntityRepository()
 export class QuizRepository {
   constructor(
-    private readonly quizRepository = AppDataSource.getRepository(QuizEntity)
+    private readonly quizRepository = AppDataSource.getRepository(QuizEntity) // private readonly queryRunner = AppDataSource.createQueryRunner()
   ) {}
- 
+
   async find(): Promise<QuizEntity[] | any> {
     try {
       return await this.quizRepository.find();
@@ -18,7 +22,7 @@ export class QuizRepository {
 
   async findOne(id: number): Promise<QuizEntity | any> {
     try {
-      return await this.quizRepository.findOne({where: {id}});
+      return await this.quizRepository.findOne({ where: { id } });
     } catch (error) {
       return;
     }
@@ -57,7 +61,7 @@ export class QuizRepository {
   async findByCode(code: string): Promise<QuizEntity | any> {
     try {
       return await this.quizRepository.findOne({
-        where: {code: code},
+        where: { code: code },
       });
     } catch (error) {
       return;
@@ -75,4 +79,70 @@ export class QuizRepository {
     }
   }
 
+  async saveSampleData(quizSampleData: any, creator: UserDTO): Promise<any> {
+    try {
+      const { code, name, questions } = quizSampleData;
+
+      let quizEntity: QuizEntity = { code, name, creator };
+      let questionsEntity: QuestionEntity[] = questions;
+      let answersEntity: any = [];
+
+      let quizCreated: any;
+      let questionsCreated: any = [];
+      let answersCreated: any = [];
+
+      await AppDataSource.manager.transaction(
+        async (transactionalEntityManager) => {
+          // Create Quiz
+          quizCreated = await transactionalEntityManager
+            .getRepository(QuizEntity)
+            .save(quizEntity);
+
+          // Map Question With Quiz Created
+          questionsEntity = questionsEntity.map((question) => {
+            return {
+              ...question,
+              quiz: quizCreated,
+              createdBy: creator.username,
+            };
+          });
+
+          // Create Question List
+          for (let question of questionsEntity) {
+            // Create Single Question
+            let questionCreated = await transactionalEntityManager
+              .getRepository(QuestionEntity)
+              .save(question);
+
+            // Map Answer With Question Created
+            let answers: any = question.answers?.map((answer) => {
+              return {
+                ...answer,
+                question: {
+                  id: questionCreated.id,
+                },
+                createdBy: creator.username,
+              };
+            });
+            
+            answersEntity.push(...answers);
+
+            // delete answer from question created and push question created to list
+            delete questionCreated.answers;
+            questionsCreated.push(questionCreated);
+          }
+
+          // Create Answer List
+          answersCreated = await transactionalEntityManager
+            .getRepository(AnswerEntity)
+            .save(answersEntity);
+        }
+      );
+
+      return { quizCreated, questionsCreated, answersCreated };
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
 }

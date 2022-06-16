@@ -5,7 +5,7 @@ import { QuizDTO } from "../services/dtos/quiz.dto";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 import { isNumber } from "../utils/validation/is-number.util";
-import { UserDTO } from "src/services/dtos/user.dto";
+import { UserDTO } from "../services/dtos/user.dto";
 
 export class QuizController {
   public readonly router: Router;
@@ -29,6 +29,7 @@ export class QuizController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -60,6 +61,7 @@ export class QuizController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -97,6 +99,7 @@ export class QuizController {
         return res.status(dataResponse.statusCode).send(dataResponse);
       }
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -163,6 +166,7 @@ export class QuizController {
         }
       }
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -194,6 +198,7 @@ export class QuizController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -228,6 +233,7 @@ export class QuizController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
+      console.log(error)
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
