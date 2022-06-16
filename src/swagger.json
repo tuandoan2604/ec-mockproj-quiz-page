@@ -1916,6 +1916,225 @@
           }
         }
       }
+    },
+    "/api/to-do-quiz/start-quiz": {
+      "post": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Start quiz",
+        "operationId": "startQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/get-answers-to-do/{questionSummaryId}": {
+      "get": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Get answers to do",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getAnswerToDo",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "questionSummaryId",
+            "in": "path",
+            "description": "question summary id of answers to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - Answers To Do",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/create-quiz-data-sample": {
+      "post": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Create quiz data sample",
+        "operationId": "createQuizDataSample",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz code already exists"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   }
 }

@@ -133,7 +133,7 @@ export class ToDoQuizController {
     }
   };
 
-  public getAnswerToDo = async (
+  public getAnswersToDo = async (
     req: Request,
     res: Response
   ): Promise<AnswerSummaryDTO[] | any> => {
@@ -181,9 +181,9 @@ export class ToDoQuizController {
       this.startQuiz
     );
     this.router.get(
-      "/get-answer-to-do/:questionSummaryId",
+      "/get-answers-to-do/:questionSummaryId",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
-      this.getAnswerToDo
+      this.getAnswersToDo
     );
   }
 }
