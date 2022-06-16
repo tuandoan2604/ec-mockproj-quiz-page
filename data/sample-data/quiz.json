@@ -264,7 +264,7 @@
     },
     {
       "name": "Trong thời gian ở nước ngoài, Nguyễn Tất Thành đã làm những công việc gì?",
-      "isMutiple": "true",
+      "isMutiple": true,
       "answers": [
         {
           "name": "Đốt lò, bán báo",

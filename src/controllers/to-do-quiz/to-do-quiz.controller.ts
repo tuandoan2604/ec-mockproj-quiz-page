@@ -53,7 +53,7 @@ export class ToDoQuizController {
       dataResponse.result = sampleDataCreated;
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -67,11 +67,61 @@ export class ToDoQuizController {
   ): Promise<QuizDTO[] | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
+      const userReqDTO: UserDTO = res?.locals?.userReq;
       const quizDTO: QuizDTO = req.body;
 
-      return res.status(dataResponse.statusCode).send(quizDTO);
+      // lấy thông tin quizToDo
+      const quizToDoFound = await this.quizService.getQuizToDo(
+        Number(quizDTO.id)
+      );
+      // Nếu quiz không được tìm thấy => Báo lỗi Quiz not found
+      if (!quizToDoFound) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Quiz not found";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      // Nếu quiz tồn tại
+      // => Tìm quiz summary inprogress trong bảng quiz summary theo userId và quizId
+      const quizSummaryInprogress =
+        await this.quizSummaryService.findQuizSummaryInprogressByUserAndQuiz(
+          userReqDTO.id,
+          quizDTO.id
+        );
+
+      // Nếu có quiz đang trong trạng thái inprogress => return về thông tin bài quiz đó
+      if (quizSummaryInprogress) {
+        console.log("Tiếp tục làm quiz!");
+        dataResponse.result = quizSummaryInprogress;
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      console.log("Tạo Quiz Summary mới!");
+
+      // Nếu ko có quiz nào đang inprogess => tức là quiz đó chưa được làm hoặc đã hoàn thành trước đó
+      // => Tạo quiz summary mới với trạng thái là inprogress và return và thông tin quiz summary vừa mới tạo
+      const quizSummaryIdCreated =
+        await this.quizSummaryService.createNewQuizToDoSummary(
+          quizToDoFound,
+          userReqDTO
+        );
+
+      // nếu tạo thành công quiz summary (nhận đc id đã tạo)
+      if (quizSummaryIdCreated) {
+        const quizTodo = await this.quizSummaryService.getQuizSummaryById(quizSummaryIdCreated);
+        dataResponse.statusCode = 200,
+        dataResponse.message = "Successfully"
+        dataResponse.result = quizTodo;
+      } else {
+        dataResponse.statusCode = 500;
+        dataResponse.message = "Internal server error";
+  
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+      
+      return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -83,17 +133,15 @@ export class ToDoQuizController {
    * Configure the routes of controller
    */
   public routes() {
-    // this.router.post(
-    //   "/start-quiz",
-    //   [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
-    //   this.startQuiz
-    // );
-
     this.router.post(
       "/create-sample-data",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.createSampleData
     );
-    this.router.post("/start-quiz", this.startQuiz);
+    this.router.post(
+      "/start-quiz",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.startQuiz
+    );
   }
 }

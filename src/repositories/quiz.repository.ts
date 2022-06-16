@@ -87,61 +87,74 @@ export class QuizRepository {
       let questionsEntity: QuestionEntity[] = questions;
       let answersEntity: any = [];
 
-      let quizCreated: any;
-      let questionsCreated: any = [];
-      let answersCreated: any = [];
+      let isSuccess = false;
 
       await AppDataSource.manager.transaction(
         async (transactionalEntityManager) => {
-          // Create Quiz
-          quizCreated = await transactionalEntityManager
-            .getRepository(QuizEntity)
-            .save(quizEntity);
+          try {
+            // Create Quiz
+            let quizCreated = await transactionalEntityManager
+              .getRepository(QuizEntity)
+              .save(quizEntity);
 
-          // Map Question With Quiz Created
-          questionsEntity = questionsEntity.map((question) => {
-            return {
-              ...question,
-              quiz: quizCreated,
-              createdBy: creator.username,
-            };
-          });
-
-          // Create Question List
-          for (let question of questionsEntity) {
-            // Create Single Question
-            let questionCreated = await transactionalEntityManager
-              .getRepository(QuestionEntity)
-              .save(question);
-
-            // Map Answer With Question Created
-            let answers: any = question.answers?.map((answer) => {
+            // Map Question With Quiz Created
+            questionsEntity = questionsEntity.map((question) => {
               return {
-                ...answer,
-                question: {
-                  id: questionCreated.id,
-                },
+                ...question,
+                quiz: quizCreated,
                 createdBy: creator.username,
               };
             });
-            
-            answersEntity.push(...answers);
 
-            // delete answer from question created and push question created to list
-            delete questionCreated.answers;
-            questionsCreated.push(questionCreated);
+            // Create Question List
+            for (let question of questionsEntity) {
+              // Create Single Question
+              let questionCreated = await transactionalEntityManager
+                .getRepository(QuestionEntity)
+                .save(question);
+
+              // Map Answer With Question Created
+              let answers: any = question.answers?.map((answer) => {
+                return {
+                  ...answer,
+                  question: {
+                    id: questionCreated.id,
+                  },
+                  createdBy: creator.username,
+                };
+              });
+
+              answersEntity.push(...answers);
+
+              isSuccess = true;
+            }
+
+            // Create Answer List
+            await transactionalEntityManager
+              .getRepository(AnswerEntity)
+              .save(answersEntity);
+          } catch (error) {
+            return;
           }
-
-          // Create Answer List
-          answersCreated = await transactionalEntityManager
-            .getRepository(AnswerEntity)
-            .save(answersEntity);
         }
       );
 
-      return { quizCreated, questionsCreated, answersCreated };
+      return isSuccess;
     } catch (error) {
       console.log(error);
+      return;
+    }
+  }
+
+  async findQuizToDo(id: number): Promise<QuizEntity[] | any> {
+    try {
+      return await this.quizRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: ["questions", "questions.answers"],
+      });
+    } catch (error) {
       return;
     }
   }

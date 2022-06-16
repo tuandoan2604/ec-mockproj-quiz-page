@@ -112,4 +112,14 @@ export class QuizService {
       return;
     }
   };
+
+  public getQuizToDo = async (id: number): Promise<QuizDTO | any> => {
+    try {
+      const quizFound = await this.quizRepository.findQuizToDo(id);
+
+      return QuizMapper.fromEntityToDTO(quizFound);
+    } catch (error) {
+      return;
+    }
+  };
 }
