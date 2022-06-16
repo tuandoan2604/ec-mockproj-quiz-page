@@ -13,6 +13,7 @@ import { AnswerDTO } from "../../services/dtos/answer.dto";
 import { ToDoQuizService } from "../../services/to-do-quiz/to-do-quiz.service";
 import { AnswerSummaryDTO } from "../../services/dtos/answer-summary.dto";
 import { isNumber } from "../../utils/validation/is-number.util";
+import { QuizSummaryDTO } from "../../services/dtos/quiz-summary.dto";
 
 export class ToDoQuizController {
   public readonly router: Router;
@@ -143,11 +144,15 @@ export class ToDoQuizController {
 
       if (!isNumber(req.params.questionSummaryId)) {
         dataResponse.statusCode = 400;
-        dataResponse.message = "Invalid ID! ID Must be a number";
+        dataResponse.message =
+          "Invalid Question Summary ID! Question Summary ID Must be a number";
         return res.status(dataResponse.statusCode).send(dataResponse);
       }
 
-      const answersToDo = await this.answerSummaryService.getAnswersToDo(Number(req.params.questionSummaryId), Number(userReqDTO.id));
+      const answersToDo = await this.answerSummaryService.getAnswersToDo(
+        Number(req.params.questionSummaryId),
+        Number(userReqDTO.id)
+      );
 
       if (!answersToDo || answersToDo.length === 0) {
         dataResponse.statusCode = 400;
@@ -156,6 +161,43 @@ export class ToDoQuizController {
       }
 
       dataResponse.result = answersToDo;
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      console.log(error);
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
+  public getQuizSummaryByQuizAndUser = async (
+    req: Request,
+    res: Response
+  ): Promise<QuizSummaryDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 200, "Successfully");
+    try {
+      const userReqDTO: UserDTO = res?.locals?.userReq;
+
+      if (!isNumber(req.params.quizId)) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Invalid Quiz ID! Quiz ID Must be a number";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      const quizsSummaryFoundByQuizAndUser =
+        await this.quizSummaryService.getQuizSummaryByQuizAndUser(
+          Number(req.params.quizId),
+          Number(userReqDTO.id)
+        );
+
+      if (!quizsSummaryFoundByQuizAndUser || quizsSummaryFoundByQuizAndUser.length === 0) {
+        dataResponse.statusCode = 400;
+        dataResponse.message = "Quiz Summary not found";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      dataResponse.result = quizsSummaryFoundByQuizAndUser;
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
       console.log(error);
@@ -184,6 +226,11 @@ export class ToDoQuizController {
       "/get-answers-to-do/:questionSummaryId",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.getAnswersToDo
+    );
+    this.router.get(
+      "/get-quiz-summary-by-quiz-and-user/:quizId",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.getQuizSummaryByQuizAndUser
     );
   }
 }

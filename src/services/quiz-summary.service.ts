@@ -106,16 +106,37 @@ export class QuizSummaryService {
   };
 
   public createNewQuizToDoSummary = async (
-    quizToDoDTO: QuizDTO, user: UserDTO
+    quizToDoDTO: QuizDTO,
+    user: UserDTO
   ): Promise<number | any> => {
     try {
       const quizToDo = QuizMapper.fromDTOtoEntity(quizToDoDTO);
-      const quizToDoSummaryIdCreated = await this.quizSummaryRepository.saveQuizToDoSummary(quizToDo, user);
+      const quizToDoSummaryIdCreated =
+        await this.quizSummaryRepository.saveQuizToDoSummary(quizToDo, user);
 
       return quizToDoSummaryIdCreated;
     } catch (error) {
       return;
     }
   };
-  
+
+  public getQuizSummaryByQuizAndUser = async (
+    quizId: number,
+    userId: number
+  ): Promise<QuizSummaryDTO[] | any> => {
+    try {
+      const quizsSummaryFound =
+        await this.quizSummaryRepository.findByQuizAndUser(quizId, userId);
+
+      const quizSummarysDTO: QuizSummaryDTO[] = [];
+
+      quizsSummaryFound.forEach((quizSummary: QuizSummaryEntity) =>
+        quizSummarysDTO.push(QuizSummaryMapper.fromEntityToDTO(quizSummary))
+      );
+
+      return quizSummarysDTO;
+    } catch (error) {
+      return;
+    }
+  };
 }

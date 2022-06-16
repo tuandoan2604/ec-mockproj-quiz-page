@@ -26,7 +26,7 @@ export class QuizSummaryRepository {
     try {
       return await this.quizSummaryRepository.findOne({
         where: { id },
-        relations: ["questionsSummary"]
+        relations: ["questionsSummary"],
         // relations: ["questionsSummary", "questionsSummary.answersSummary"],
       });
     } catch (error) {
@@ -183,6 +183,29 @@ export class QuizSummaryRepository {
       );
 
       return quizSummaryCreatedId;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  };
+
+  public findByQuizAndUser = async (
+    quizId: number,
+    userId: number
+  ): Promise<QuizSummaryEntity | any> => {
+    try {
+      const quizsSummaryFound = await this.quizSummaryRepository.find({
+        where: {
+          user: {
+            id: userId,
+          },
+          quiz: {
+            id: quizId,
+          }
+        }
+      })
+
+      return quizsSummaryFound;
     } catch (error) {
       console.log(error);
       return;
