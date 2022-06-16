@@ -26,8 +26,8 @@ export class QuizSummaryRepository {
     try {
       return await this.quizSummaryRepository.findOne({
         where: { id },
-        relations: ["questionsSummary"],
-        // relations: ["questionsSummary", "questionsSummary.answersSummary"],
+        // relations: ["questionsSummary"],
+        relations: ["questionsSummary", "questionsSummary.answersSummary"],
       });
     } catch (error) {
       return;
@@ -91,8 +91,8 @@ export class QuizSummaryRepository {
           },
           status: "IN_PROGRESS",
         },
-        relations: ["questionsSummary"],
-        // relations: ["questionsSummary", "questionsSummary.answersSummary"],
+        // relations: ["questionsSummary"],
+        relations: ["questionsSummary", "questionsSummary.answersSummary"],
       });
 
       return quizSummaryFound;

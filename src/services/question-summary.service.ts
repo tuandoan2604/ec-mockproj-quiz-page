@@ -1,5 +1,6 @@
 import { QuestionSummaryEntity } from "../entities/question-summary.entity";
 import { QuestionSummaryRepository } from "../repositories/question-summary.repository";
+import { AnswerSummaryDTO } from "./dtos/answer-summary.dto";
 import { QuestionSummaryDTO } from "./dtos/question-summary.dto";
 import { QuestionSummaryMapper } from "./mappers/question-summary.mapper";
 
@@ -120,6 +121,19 @@ export class QuestionSummaryService {
       );
 
       return questionSummarysCreatedDTO;
+    } catch (error) {
+      return;
+    }
+  };
+
+  public saveAnswer = async (
+    questionSummaryDTO: QuestionSummaryDTO,
+    answersSummary: AnswerSummaryDTO
+  ): Promise<any> => {
+    try {
+      const result = await this.questionSummaryRepository.saveAnswer(questionSummaryDTO, answersSummary);
+
+      return result;
     } catch (error) {
       return;
     }

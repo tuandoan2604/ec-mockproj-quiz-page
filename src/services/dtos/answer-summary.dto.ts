@@ -8,5 +8,6 @@ import { QuestionDTO } from "./question.dto";
 export class AnswerSummaryDTO extends BaseDTO {
   name: string;
   isCorrect: boolean;
+  isSelected: boolean;
   question?: QuestionSummaryDTO;
 }

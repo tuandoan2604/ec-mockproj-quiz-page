@@ -14,6 +14,7 @@ import { ToDoQuizService } from "../../services/to-do-quiz/to-do-quiz.service";
 import { AnswerSummaryDTO } from "../../services/dtos/answer-summary.dto";
 import { isNumber } from "../../utils/validation/is-number.util";
 import { QuizSummaryDTO } from "../../services/dtos/quiz-summary.dto";
+import { QuestionSummaryDTO } from "../../services/dtos/question-summary.dto";
 
 export class ToDoQuizController {
   public readonly router: Router;
@@ -191,13 +192,56 @@ export class ToDoQuizController {
           Number(userReqDTO.id)
         );
 
-      if (!quizsSummaryFoundByQuizAndUser || quizsSummaryFoundByQuizAndUser.length === 0) {
+      if (
+        !quizsSummaryFoundByQuizAndUser ||
+        quizsSummaryFoundByQuizAndUser.length === 0
+      ) {
         dataResponse.statusCode = 400;
         dataResponse.message = "Quiz Summary not found";
         return res.status(dataResponse.statusCode).send(dataResponse);
       }
 
       dataResponse.result = quizsSummaryFoundByQuizAndUser;
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      console.log(error);
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
+  public saveAnswer = async (req: Request, res: Response): Promise<any> => {
+    let dataResponse = new DataResponse(null, 200, "Successfully saved answer");
+    try {
+      const questionSummaryDTO: QuestionSummaryDTO = req.body;
+      const answersSummary: any = questionSummaryDTO.answersSummary?.map(
+        (answerSummary) => {
+          return { id: answerSummary.id, isSelected: answerSummary.isSelected };
+        }
+      );
+
+      const isAnswerChanged = answersSummary.some(
+        (answer: AnswerSummaryDTO) => {
+          return answer.isSelected;
+        }
+      );
+
+      console.log(answersSummary);
+
+      if (!isAnswerChanged) {
+        dataResponse.message = "NOT_YET_ANSWERED";
+        return res.status(dataResponse.statusCode).send(dataResponse);
+      }
+
+      questionSummaryDTO.status = "ANSWER_SAVED";
+      const quizSummarySaved = await this.questionSummaryService.saveAnswer(
+        questionSummaryDTO,
+        answersSummary
+      );
+
+      dataResponse.result = quizSummarySaved;
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
       console.log(error);
@@ -231,6 +275,11 @@ export class ToDoQuizController {
       "/get-quiz-summary-by-quiz-and-user/:quizId",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.getQuizSummaryByQuizAndUser
+    );
+    this.router.put(
+      "/save-answer",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.saveAnswer
     );
   }
 }
