@@ -13,6 +13,8 @@ func main() {
 	router := gin.Default()
 
 	router.GET("question/:number", controller.GetQuestion)
+	router.GET("question/ans", controller.GetQuestionAnswer)
+	router.GET("point/:id", controller.GetPoint)
 	router.POST("question/", controller.PostQuestion)
 
 	router.Run()
