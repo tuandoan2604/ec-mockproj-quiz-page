@@ -158,7 +158,7 @@
     },
     {
       "name": "Theo Hồ Chí Minh, ưu điểm lớn nhất của chủ nghĩa Tam dân của Tôn Trung Sơn là gì?",
-      "isMutiple": false,
+      "isMutiple": true,
       "answers": [
         {
           "name": "Phù hợp với điều kiện thực tế nước ta.",
@@ -170,13 +170,13 @@
         },
         {
           "name": "Chống phong kiến.",
-          "isCorrect": false
+          "isCorrect": true
         }
       ]
     },
     {
       "name": "Tư tưởng Hồ Chí Minh hình thành trên cơ sở:",
-      "isMutiple": false,
+      "isMutiple": true,
       "answers": [
         {
           "name": "Vận dụng và phát triển sáng tạo chủ nghĩa Mác- Lênin",
@@ -192,13 +192,13 @@
         },
         {
           "name": "Vận dụng hoàn toàn chủ nghĩa Mác - Lênin",
-          "isCorrect": false
+          "isCorrect": true
         }
       ]
     },
     {
       "name": "Một trong những giá trị của văn hoá phương Tây được Hồ Chí Minh tiếp thu để hình thành tư tưởng của mình là:",
-      "isMutiple": false,
+      "isMutiple": true,
       "answers": [
         {
           "name": "Tư tưởng văn hoá dân chủ và cách mạng của cách mạng Pháp và cách mạng Mỹ.",
@@ -206,7 +206,7 @@
         },
         {
           "name": "Những mặt tích cực của Nho Giáo",
-          "isCorrect": false
+          "isCorrect": true
         },
         {
           "name": "Tư tưởng vị tha của Phật giáo",
@@ -214,68 +214,6 @@
         },
         {
           "name": "Chủ nghĩa Tam dân của Tôn Trung Sơn.",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "name": "Tư tưởng Hồ Chí Minh là?",
-      "isMutiple": false,
-      "answers": [
-        {
-          "name": "Hệ thống các luận điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam",
-          "isCorrect": false
-        },
-        {
-          "name": "Hệ thống các quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam",
-          "isCorrect": true
-        },
-        {
-          "name": "Hệ thống các tư tưởng toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam",
-          "isCorrect": false
-        },
-        {
-          "name": "Hệ thống các học thuyết toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "name": "Tư tưởng Hồ Chí Minh được hình thành và phát triển qua mấy giai đoạn?",
-      "isMutiple": false,
-      "answers": [
-        {
-          "name": "3",
-          "isCorrect": false
-        },
-        {
-          "name": "4",
-          "isCorrect": false
-        },
-        {
-          "name": "5",
-          "isCorrect": true
-        },
-        {
-          "name": "6",
-          "isCorrect": false
-        }
-      ]
-    },
-    {
-      "name": "Trong thời gian ở nước ngoài, Nguyễn Tất Thành đã làm những công việc gì?",
-      "isMutiple": true,
-      "answers": [
-        {
-          "name": "Đốt lò, bán báo",
-          "isCorrect": true
-        },
-        {
-          "name": "Thợ ảnh, làm bánh",
-          "isCorrect": true
-        },
-        {
-          "name": "Tất cả đều sai",
           "isCorrect": false
         }
       ]

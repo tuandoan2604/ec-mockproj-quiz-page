@@ -23,6 +23,15 @@ export const checkRole = (roles: Array<string>) => {
       return;
     }
 
+    if (!userEntity) {
+      res.status(401).send({
+        statusCode: 401,
+        message: "Unauthorized",
+      });
+
+      return;
+    }
+
     //Check if array of authorized roles includes the user's role
     try {
       if (roles.indexOf(userEntity.role) > -1) {

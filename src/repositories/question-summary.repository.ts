@@ -2,6 +2,7 @@ import { EntityRepository } from "typeorm";
 import { QuestionSummaryEntity } from "../entities/question-summary.entity";
 import { AppDataSource } from "../data-source";
 import { AnswerSummaryEntity } from "../entities/answer-summary.entity";
+import { QuizSummaryEntity } from "../entities/quiz-summary.entity";
 
 @EntityRepository()
 export class QuestionSummaryRepository {
@@ -85,9 +86,10 @@ export class QuestionSummaryRepository {
 
   async saveAnswer(
     questionSummary: QuestionSummaryEntity,
-    answersSummary: AnswerSummaryEntity
+    answersSummary: AnswerSummaryEntity[]
   ): Promise<any> {
     let isSaved = false;
+    console.log("answersSummary to save: ", answersSummary);
     try {
       await AppDataSource.manager.transaction(
         async (transactionalEntityManager) => {
@@ -99,8 +101,8 @@ export class QuestionSummaryRepository {
 
             // Save Answers Summary
             await transactionalEntityManager
-            .getRepository(AnswerSummaryEntity)
-            .save(answersSummary);
+              .getRepository(AnswerSummaryEntity)
+              .save(answersSummary);
 
             isSaved = true;
           } catch (error) {
@@ -110,6 +112,45 @@ export class QuestionSummaryRepository {
       );
 
       return isSaved;
+    } catch (error) {
+      return;
+    }
+  }
+
+  async countQuestionByQuiz(
+    quizSummary: QuizSummaryEntity
+  ): Promise<number | any> {
+    try {
+      const numberOfQuestion = await this.questionSummaryRepository.count({
+        where: {
+          quizSummary: {
+            id: quizSummary.id,
+          },
+        },
+      });
+
+      return numberOfQuestion;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  async findQuestionsSummaryIsMutipleTrue(
+    quizSummary: QuizSummaryEntity
+  ): Promise<QuestionSummaryEntity[] | any> {
+    try {
+      const questionsSummary = await this.questionSummaryRepository.find({
+        where: {
+          quizSummary: {
+            id: quizSummary.id,
+          },
+          isMutiple: true,
+        },
+        relations: ["answersSummary"],
+      });
+
+      return questionsSummary;
     } catch (error) {
       return;
     }

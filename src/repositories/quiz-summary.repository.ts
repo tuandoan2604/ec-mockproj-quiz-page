@@ -200,9 +200,9 @@ export class QuizSummaryRepository {
           },
           quiz: {
             id: quizId,
-          }
-        }
-      })
+          },
+        },
+      });
 
       return quizsSummaryFound;
     } catch (error) {
@@ -211,4 +211,20 @@ export class QuizSummaryRepository {
     }
   };
 
+  async countQuestionByQuiz(
+    quizSummary: QuizSummaryEntity
+  ): Promise<number | any> {
+    try {
+      const numberOfQuestion = await AppDataSource
+      .createQueryBuilder(QuestionSummaryEntity, "question_summary")
+      .innerJoin(QuizSummaryEntity, 'quiz_summary', "quiz_summary.id = question_summary.quizSummaryId")
+      .where("quiz_summary.id = :id", { id: quizSummary.id })
+      .getCount()
+
+      return numberOfQuestion;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
 }

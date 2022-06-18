@@ -139,4 +139,19 @@ export class QuizSummaryService {
       return;
     }
   };
+
+  public countQuestionByQuiz = async (
+    quizSummaryDTO: QuizSummaryDTO
+  ): Promise<number | any> => {
+    try {
+      const quizSummary = QuizSummaryMapper.fromDTOtoEntity(quizSummaryDTO);
+
+      const numberOfQuestion = await this.quizSummaryRepository.countQuestionByQuiz(quizSummary);
+
+      return numberOfQuestion;
+    } catch (error) {
+      return;
+    }
+  }
+
 }

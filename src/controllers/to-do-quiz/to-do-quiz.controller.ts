@@ -228,8 +228,6 @@ export class ToDoQuizController {
         }
       );
 
-      console.log(answersSummary);
-
       if (!isAnswerChanged) {
         dataResponse.message = "NOT_YET_ANSWERED";
         return res.status(dataResponse.statusCode).send(dataResponse);
@@ -255,12 +253,78 @@ export class ToDoQuizController {
   public submitQuiz = async (req: Request, res: Response) => {
     let dataResponse = new DataResponse(null, 200, "Successfully submited");
     try {
-      const quizSummary: QuizSummaryDTO = req.body;
+      let marks = 0;
+      let grade = 0;
+      // quiz submitted
+      const quizSummaryDTO: QuizSummaryDTO = req.body;
 
-      // const answerSummaryByQuizSummaryToSubmit = await this.quizSummaryService.getAnswerSummaryByQuizSummaryToSubmit(quizSummary);
+      // check quiz summary exist
+      // const quizSummaryFoundToSubmitted =
+      //   await this.quizSummaryService.getQuizSummaryByIdAndStatus(
+      //     quizSummaryDTO
+      //   );
+      // if (!quizSummaryFoundToSubmitted) {
+      //   dataResponse.statusCode = 400;
+      //   dataResponse.message = "Quiz Submited not found";
+      //   return res.status(dataResponse.statusCode).send(dataResponse);
+      // }
 
-      dataResponse.result = quizSummary;
-      return res.status(dataResponse.statusCode).send(dataResponse);
+      // Đếm số lượng câu hỏi trong quiz => để chia điểm cho mỗi câu trả lời đúng
+      const numberOfQuestion =
+        await this.questionSummaryService.countQuestionByQuiz(quizSummaryDTO);
+
+      // Đếm số lượng câu trả lời đúng của những câu hỏi "Is Not Mutiple" - (isMutiple = false)
+      const numberOfAnswerCorrectWithIsMutipleFalse =
+        await this.answerSummaryService.getNumberOfAnswerCorrectWithIsMutipleFalse(
+          quizSummaryDTO
+        );
+
+      // Lấy ra danh sách những câu hỏi "Is Mutile" - (isMutiple = true) (kèm theo những câu trả lời đúng "relations_answer" - isCorrect = true )
+      const questionsSummaryIsMutipleTrue =
+        await this.questionSummaryService.getQuestionsSummaryIsMutipleTrue(
+          quizSummaryDTO
+        );
+
+      // Số lượng câu trả lời đúng của những câu hỏi isMutiple = true
+      let numberOfAnswerCorrectWithIsMutipleTrue = 0;
+
+      // Duyệt qua tất cả những câu hỏi isMutiple = true lấy ra đc 
+      questionsSummaryIsMutipleTrue.forEach((question: QuestionSummaryDTO) => {
+        // Every => nếu tất cả answer của question mà có isCorrect = isSelected => is correct answer
+        let isCorrectAnswers = 
+        question.answersSummary?.every((answer) => {
+          return answer.isCorrect === answer.isSelected;
+        })
+
+        // Nếu câu trả lời đúng => + dồn số lượng câu trả lời đúng; 
+        if (isCorrectAnswers) {
+          numberOfAnswerCorrectWithIsMutipleTrue += 1;
+        }
+
+      });
+
+      // marks: Số lượng câu trả lời đúng (của 2 dạng question: isMutiple = true or false)
+      marks =
+        numberOfAnswerCorrectWithIsMutipleFalse +
+        numberOfAnswerCorrectWithIsMutipleTrue;
+      // grade: Điểm / 10 = marks * (số điểm / 1 câu hỏi). số điểm / 1 câu hỏi = 10 / numberOfQuestion - (tổng số lượng câu hỏi)
+      grade = marks * (10 / numberOfQuestion);
+
+      // Lưu marks và grade
+      const quizSummaryDTOToSubmitted: QuizSummaryDTO = {
+        id: quizSummaryDTO.id,
+        status: "SUBMITTED",
+        marks: marks,
+        grade: grade,
+      }
+      
+      // Update marks và grade trong db
+      const quizSummarySubmitted = await this.quizSummaryService.update(quizSummaryDTOToSubmitted);
+
+      dataResponse.result = quizSummarySubmitted;
+      return res.status(dataResponse.statusCode).send({
+        dataResponse,
+      });
     } catch (error) {
       console.log(error);
       dataResponse.statusCode = 500;
@@ -268,7 +332,7 @@ export class ToDoQuizController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     }
-  }
+  };
 
   /**
    * Configure the routes of controller

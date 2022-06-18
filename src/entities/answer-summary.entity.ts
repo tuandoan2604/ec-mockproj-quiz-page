@@ -9,9 +9,10 @@ export class AnswerSummaryEntity extends BaseEntity {
   @Column()
   name: string;
   
-  @Column({
-    select: false,
-  })
+  // @Column({
+  //   select: false,
+  // })
+  @Column()
   isCorrect: boolean;
 
   @Column()

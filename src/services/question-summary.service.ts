@@ -1,8 +1,12 @@
+import { AnswerSummaryEntity } from "../entities/answer-summary.entity";
 import { QuestionSummaryEntity } from "../entities/question-summary.entity";
 import { QuestionSummaryRepository } from "../repositories/question-summary.repository";
 import { AnswerSummaryDTO } from "./dtos/answer-summary.dto";
 import { QuestionSummaryDTO } from "./dtos/question-summary.dto";
+import { QuizSummaryDTO } from "./dtos/quiz-summary.dto";
+import { AnswerSummaryMapper } from "./mappers/answer-summary.mapper";
 import { QuestionSummaryMapper } from "./mappers/question-summary.mapper";
+import { QuizSummaryMapper } from "./mappers/quiz-summary.mapper";
 
 export class QuestionSummaryService {
   constructor(
@@ -128,12 +132,57 @@ export class QuestionSummaryService {
 
   public saveAnswer = async (
     questionSummaryDTO: QuestionSummaryDTO,
-    answersSummary: AnswerSummaryDTO
+    answersSummaryDTO: AnswerSummaryDTO[]
   ): Promise<any> => {
     try {
-      const result = await this.questionSummaryRepository.saveAnswer(questionSummaryDTO, answersSummary);
+      const questionSummary =
+        QuestionSummaryMapper.fromDTOtoEntity(questionSummaryDTO);
+      const answersSummary: AnswerSummaryEntity[] = [];
+
+      answersSummaryDTO.forEach((answerDTO) => {
+        answersSummary.push(AnswerSummaryMapper.fromDTOtoEntity(answerDTO));
+      });
+
+      const result = await this.questionSummaryRepository.saveAnswer(
+        questionSummary,
+        answersSummary
+      );
 
       return result;
+    } catch (error) {
+      return;
+    }
+  };
+
+  public countQuestionByQuiz = async (
+    quizSummaryDTO: QuizSummaryDTO
+  ): Promise<number | any> => {
+    try {
+      const quizSummary = QuizSummaryMapper.fromDTOtoEntity(quizSummaryDTO);
+
+      const numberOfQuestion = await this.questionSummaryRepository.countQuestionByQuiz(quizSummary);
+
+      return numberOfQuestion;
+    } catch (error) {
+      return;
+    }
+  }
+
+  public getQuestionsSummaryIsMutipleTrue = async (
+    quizSummaryDTO: QuizSummaryDTO
+  ): Promise<AnswerSummaryDTO[] | any> => {
+    try {
+      const quizSummary = QuizSummaryMapper.fromDTOtoEntity(quizSummaryDTO);
+
+      const questionsSummaryIsMutipleTrue = await this.questionSummaryRepository.findQuestionsSummaryIsMutipleTrue(quizSummary);
+
+      const questionsSummaryDTO: QuestionSummaryDTO[]= [];
+
+      questionsSummaryIsMutipleTrue.forEach((answersSummary: AnswerSummaryEntity) => {
+        questionsSummaryDTO.push(AnswerSummaryMapper.fromEntityToDTO(answersSummary));
+      })
+
+      return questionsSummaryDTO;
     } catch (error) {
       return;
     }
