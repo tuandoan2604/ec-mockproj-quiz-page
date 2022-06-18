@@ -160,9 +160,8 @@ export class QuizSummaryRepository {
                     ...answerSummary,
                     id: null,
                     isSelected: false,
-                    questionSummary: {
-                      id: questionSummaryCreated.id,
-                    },
+                    quizSummary: quizSummaryCreated,
+                    questionSummary: questionSummaryCreated,
                     user: user,
                     createdBy: user.username,
                   };
@@ -211,4 +210,5 @@ export class QuizSummaryRepository {
       return;
     }
   };
+
 }

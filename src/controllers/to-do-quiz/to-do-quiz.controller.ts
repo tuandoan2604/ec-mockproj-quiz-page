@@ -252,6 +252,24 @@ export class ToDoQuizController {
     }
   };
 
+  public submitQuiz = async (req: Request, res: Response) => {
+    let dataResponse = new DataResponse(null, 200, "Successfully submited");
+    try {
+      const quizSummary: QuizSummaryDTO = req.body;
+
+      // const answerSummaryByQuizSummaryToSubmit = await this.quizSummaryService.getAnswerSummaryByQuizSummaryToSubmit(quizSummary);
+
+      dataResponse.result = quizSummary;
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      console.log(error);
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  }
+
   /**
    * Configure the routes of controller
    */
@@ -280,6 +298,11 @@ export class ToDoQuizController {
       "/save-answer",
       [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
       this.saveAnswer
+    );
+    this.router.post(
+      "/submit-quiz",
+      [checkJwt, checkRole(["ROLE_ADMIN", "ROLE_USER"])],
+      this.submitQuiz
     );
   }
 }
