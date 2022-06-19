@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Quiz/auth"
 	"Quiz/controller"
 
 	"github.com/gin-gonic/gin"
@@ -12,10 +13,11 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("question/:number", controller.GetQuestion)
-	router.GET("question/ans", controller.GetQuestionAnswer)
-	router.GET("point/:id", controller.GetPoint)
-	router.POST("question/", controller.PostQuestion)
+	router.POST("/login", controller.PostLogin)
 
+	router.GET("question/:number", auth.AuthorizeJWT(), controller.GetQuestion)
+	router.GET("question/ans", auth.AuthorizeJWT(), controller.GetQuestionAnswer)
+	router.GET("point/:id", auth.AuthorizeJWT(), controller.GetPoint)
+	router.POST("question/", auth.AuthorizeJWT(), controller.PostQuestion)
 	router.Run()
 }

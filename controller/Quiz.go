@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"Quiz/auth"
 	"Quiz/model"
+	"Quiz/service"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -17,16 +19,50 @@ func CheckError(err error) {
 	}
 }
 
+var jwtService auth.JWTService = auth.JWTAuthService()
+var loginController service.LoginController = service.LoginHandler(jwtService)
+
+//// Post Login ///
+func PostLogin(c *gin.Context) {
+	db, _ := model.ConnectDataBase()
+	Username := c.PostForm("username")
+	Password := c.PostForm("password")
+
+	isUserAuthenticated := false
+
+	var password string
+	var id int
+	row, _ := db.Query(`SELECT "Password", "Id" FROM "User"."User" WHERE "Username" = $1`, Username)
+	for row.Next() {
+
+		row.Scan(&password, &id)
+		if password == Password {
+			isUserAuthenticated = true
+		}
+	}
+	var status string
+	if isUserAuthenticated {
+		token, refreshToken := loginController.Login(c)
+		status = "success"
+
+		c.JSON(http.StatusOK, gin.H{"Status": status, "token": token, "refreshToken": refreshToken, "UserId": id})
+		//tocken = auth.JWTService.GenerateToken(auth.JWTService, Username, tru)
+	} else {
+		//token = ""
+		status = "error"
+		c.JSON(http.StatusUnauthorized, gin.H{"status": status, "tocken": nil})
+	}
+}
+
 ////GET Question /////
 func GetQuestion(c *gin.Context) {
-
 	db, err := model.ConnectDataBase()
 	CheckError(err)
 
 	number := c.Param("number")
 	rows, err := db.Query(`SELECT "Question", "A", "B"  FROM "User"."Question" WHERE "Id" = $1`, number)
 	CheckError(err)
-	//defer rows.Close)
+	//defer rows.Close(
 	for rows.Next() {
 		var Question string
 		var A string
@@ -38,6 +74,7 @@ func GetQuestion(c *gin.Context) {
 
 		c.JSON(http.StatusOK, gin.H{"Question": Question, "Choice": gin.H{"A": A, "B": B}})
 	}
+
 }
 
 ////GET the correct answer ////
@@ -88,7 +125,7 @@ func PostQuestion(c *gin.Context) {
 	CheckError(err)
 
 	userId := c.Query("id")
-	question, err := strconv.Atoi(c.Query("quest"))
+	question, _ := strconv.Atoi(c.Query("quest"))
 	answer := c.Query("ans")
 	time := time.Now().Format("2006-01-02 15:04:05")
 
@@ -96,7 +133,7 @@ func PostQuestion(c *gin.Context) {
 	//time := time.Now().Format("2020.16.06 14:29:00")
 	fmt.Println(userId, question, answer, time)
 
-	row, err := db.Query(`SELECT "Answer" FROM "User"."Question" WHERE "Id" = $1`, question)
+	row, _ := db.Query(`SELECT "Answer" FROM "User"."Question" WHERE "Id" = $1`, question)
 
 	for row.Next() {
 		var a string
