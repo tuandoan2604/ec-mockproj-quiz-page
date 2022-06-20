@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './User';
-import { UserDTO } from './user.dto';
 @Injectable()
 export class UserService {
   public static async findByUsername(username: string): Promise<User> {
@@ -9,7 +8,7 @@ export class UserService {
       select: ['id', 'username', 'password', 'salt', 'role'],
     });
   }
-  public static async createUser(user: UserDTO): Promise<User> {
-    return User.save(user);
+  public static async createUser(user: User): Promise<User> {
+    return user.save();
   }
 }

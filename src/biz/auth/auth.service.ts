@@ -10,11 +10,7 @@ export class AuthService {
   public static encodePassword(inputPassword: string, salt: string): string {
     return SHA1(MD5(inputPassword) + salt);
   }
-  public static validate(
-    inputPassword: string,
-    encodedPassword: string,
-    salt: string,
-  ): boolean {
+  public static validate(inputPassword: string, encodedPassword: string, salt: string): boolean {
     return encodedPassword === this.encodePassword(inputPassword, salt);
   }
   public static signJWT = (payload, expire, key) => {
@@ -30,16 +26,8 @@ export class AuthService {
       username,
       role,
     } as JwtPayload;
-    const accessToken = this.signJWT(
-      payload,
-      JwtConfig().jwtAccessTokenExpiresIn,
-      JwtConfig().jwtAccessTokenSecretKey,
-    );
-    const refreshToken = this.signJWT(
-      payload,
-      JwtConfig().jwtRefreshTokenExpiresIn,
-      JwtConfig().jwtRefreshTokenSecretKey,
-    );
+    const accessToken = this.signJWT(payload, JwtConfig().jwtAccessTokenExpiresIn, JwtConfig().jwtAccessTokenSecretKey);
+    const refreshToken = this.signJWT(payload, JwtConfig().jwtRefreshTokenExpiresIn, JwtConfig().jwtRefreshTokenSecretKey);
     return {
       accessToken,
       refreshToken,
@@ -52,11 +40,7 @@ export class AuthService {
     return JWT.verify(token, JwtConfig().jwtRefreshTokenSecretKey);
   }
   public static generateRefreshToken(payload: JwtPayload, accessToken: string) {
-    const refreshToken = this.signJWT(
-      payload,
-      JwtConfig().jwtRefreshTokenExpiresIn,
-      JwtConfig().jwtRefreshTokenSecretKey,
-    );
+    const refreshToken = this.signJWT(payload, JwtConfig().jwtRefreshTokenExpiresIn, JwtConfig().jwtRefreshTokenSecretKey);
     return {
       accessToken,
       refreshToken,

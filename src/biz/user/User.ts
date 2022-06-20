@@ -1,20 +1,10 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
   @PrimaryColumn()
   id: number;
 
-  // @Unique(['username'])
   @Column()
   username: string;
 
@@ -28,19 +18,14 @@ export class User extends BaseEntity {
   salt: string;
 
   @CreateDateColumn({
-    default: new Date(),
-    nullable: false,
-  })
-  createdAt: string;
-
-  @UpdateDateColumn({
-    default: new Date(),
+    default: `now()`,
     nullable: true,
   })
-  updatedAt: string;
+  createdAt: Date;
 
-  // constructor(partial: Partial<User>) {
-  //   super();
-  //   Object.assign(this, partial);
-  // }
+  @UpdateDateColumn({
+    default: `now()`,
+    nullable: true,
+  })
+  updatedAt: Date;
 }
