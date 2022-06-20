@@ -28,6 +28,7 @@ export class QuizSummaryRepository {
         where: { id },
         // relations: ["questionsSummary"],
         relations: ["questionsSummary", "questionsSummary.answersSummary"],
+        
       });
     } catch (error) {
       return;
