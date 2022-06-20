@@ -3,7 +3,7 @@ import { IsNotEmpty, IsArray } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class OptionDTO {
-  id: number;
+  id: string;
   @IsNotEmpty()
   content: string;
   order: number;
@@ -14,7 +14,7 @@ export class OptionDTO {
 }
 
 export class QuestionDTO {
-  id: number;
+  id: string;
   @IsNotEmpty()
   content: string;
   createBy: string;
@@ -28,7 +28,7 @@ export class QuestionDTO {
 }
 
 export class QuizDTO {
-  id: number;
+  id: string;
   content: string;
   questions: QuestionDTO[];
   createAt?: Date;
@@ -36,7 +36,7 @@ export class QuizDTO {
 
 export class QuizUpdateDTO extends PartialType(QuizDTO) {
   @IsNotEmpty()
-  id: number;
+  id: string;
   @IsNotEmpty()
   @IsArray()
   questions: QuestionDTO[];

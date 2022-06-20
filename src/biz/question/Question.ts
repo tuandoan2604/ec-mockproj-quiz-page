@@ -12,7 +12,7 @@ export class Question extends MyBaseEntity {
   order: number;
 
   @Column()
-  type: string;
+  type: 'multi' | 'single';
 
   @ManyToOne(() => Quiz)
   @JoinColumn({ name: 'quizId' })

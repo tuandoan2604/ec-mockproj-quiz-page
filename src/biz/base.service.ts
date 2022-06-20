@@ -8,8 +8,8 @@ export class BaseService<T extends MyBaseEntity, R extends Repository<T>> {
     this.repository = repository;
   }
 
-  index(): Promise<T[]> {
-    return this.repository.find();
+  index(skip: number, limit: number): Promise<T[]> {
+    return this.repository.createQueryBuilder().skip(skip).take(limit).getMany();
   }
 
   findById(id: string): Promise<T> {

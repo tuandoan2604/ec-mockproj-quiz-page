@@ -11,4 +11,15 @@ export class QuizService extends BaseService<Quiz, Repository<Quiz>> {
   ) {
     super(repository);
   }
+  getDetail(id: string): Promise<Quiz> {
+    return (
+      this.repository
+        .createQueryBuilder('q')
+        .leftJoinAndSelect('q.questions', 'qu')
+        .leftJoinAndSelect('qu.options', 'o')
+        // .select(['q.*', 'qu.*'])
+        .where('q.id = :id', { id })
+        .getOne()
+    );
+  }
 }
