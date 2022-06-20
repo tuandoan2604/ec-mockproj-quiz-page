@@ -26,9 +26,9 @@ module.exports = {
         // trailingComma: 'none',
         endOfLine: 'lf',
         tabWidth: 2,
-        printWidth: 160,
+        printWidth: 140,
         useTabs: false,
       },
     ],
   },
-}
+};

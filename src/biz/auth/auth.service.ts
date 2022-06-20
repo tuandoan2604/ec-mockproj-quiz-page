@@ -21,8 +21,9 @@ export class AuthService {
     };
     return JWT.sign(payload, key, option);
   };
-  public static generateLoginToken(username: string, role: string) {
+  public static generateLoginToken(userId: number, username: string, role: string) {
     const payload = {
+      userId,
       username,
       role,
     } as JwtPayload;
@@ -34,7 +35,7 @@ export class AuthService {
     };
   }
   public static verifyAccessToken(token: string): any {
-    return JWT.verify(token, JwtConfig().jwtAccessTokenExpiresIn);
+    return JWT.verify(token, JwtConfig().jwtAccessTokenSecretKey);
   }
   public static verifyRefreshToken(token: string): any {
     return JWT.verify(token, JwtConfig().jwtRefreshTokenSecretKey);

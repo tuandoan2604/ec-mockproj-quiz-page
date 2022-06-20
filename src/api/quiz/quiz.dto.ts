@@ -1,16 +1,15 @@
-import { IsBoolean, IsEmail, IsNotEmpty, Length, Validate, IsOptional, IsNumber } from 'class-validator';
+import _ from 'lodash';
+import { IsNotEmpty, IsArray } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
-import { User } from '@biz/user/User';
 
-export class Option {
+export class OptionDTO {
   id: number;
   @IsNotEmpty()
   content: string;
-  @IsNotEmpty()
   order: number;
   @IsNotEmpty()
-  isCorret: string;
-  isChose: string;
+  isCorrect?: boolean;
+  isChose?: boolean;
   createBy: string;
 }
 
@@ -21,36 +20,31 @@ export class QuestionDTO {
   createBy: string;
   @IsNotEmpty()
   order: number;
-  options: Array<Option>;
-  public toQuestionEntity() {
-    const user = new User();
-    return user;
-  }
+  @IsNotEmpty()
+  type: 'multi' | 'single';
+  @IsArray()
+  @IsNotEmpty()
+  options: OptionDTO[];
 }
 
 export class QuizDTO {
   id: number;
   content: string;
-  questions: Array<QuestionDTO>;
-
-  public toQuizEntity(salt, role) {
-    const user = new User();
-    // user.username = this.username;
-    // user.password = this.password;
-    user.salt = salt;
-    user.role = role;
-    return user;
-  }
+  questions: QuestionDTO[];
+  createAt?: Date;
 }
 
 export class QuizUpdateDTO extends PartialType(QuizDTO) {
   @IsNotEmpty()
   id: number;
   @IsNotEmpty()
-  questions: Array<QuestionDTO>;
+  @IsArray()
+  questions: QuestionDTO[];
 }
 
 export class QuizCreateDTO extends PartialType(QuizDTO) {
   @IsNotEmpty()
   content?: string;
+  @IsArray()
+  questions?: QuestionDTO[];
 }

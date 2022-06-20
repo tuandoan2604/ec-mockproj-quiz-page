@@ -1,13 +1,13 @@
-import { Quiz } from './Quiz';
+import { Option } from './Option';
 import { Injectable, Inject } from '@nestjs/common';
 import { BaseService } from '../base.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class QuizService extends BaseService<Quiz, Repository<Quiz>> {
+export class OptionService extends BaseService<Option, Repository<Option>> {
   constructor(
-    @Inject('QUIZ_REPOSITORY')
-    repository: Repository<Quiz>,
+    @Inject('OPTION_REPOSITORY')
+    repository: Repository<Option>,
   ) {
     super(repository);
   }

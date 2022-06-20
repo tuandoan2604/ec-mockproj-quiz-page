@@ -9,7 +9,7 @@ export class Question extends MyBaseEntity {
   content: string;
 
   @Column()
-  order: string;
+  order: number;
 
   @Column()
   type: string;

@@ -10,6 +10,9 @@ export class Option extends MyBaseEntity {
   @Column()
   isCorrect: boolean;
 
+  @Column()
+  order: number;
+
   @ManyToOne(() => Question)
   @JoinColumn({ name: 'questionId' })
   question?: Question;

@@ -4,6 +4,7 @@ import { AuthService } from 'src/biz/auth/auth.service';
 import { RegisterUserDTO, LoginDTO } from './user.dto';
 import { generateSalt } from 'src/utils/helper';
 import { JwtPayload } from 'src/biz/auth/auth.dto';
+import { UserReq } from '../decorator/user.decorator';
 
 @Controller('/user')
 export class UserController {
@@ -15,7 +16,7 @@ export class UserController {
     if (!user) throw new HttpException('user not found', HttpStatus.BAD_REQUEST);
     const validation = AuthService.validate(password, user.password, user.salt);
     if (!validation) throw new HttpException('username or password is incorrect', HttpStatus.BAD_REQUEST);
-    return AuthService.generateLoginToken(username, user.role);
+    return AuthService.generateLoginToken(user.id, username, user.role);
   }
   @Post('/register')
   async register(@Body() reqBody: RegisterUserDTO): Promise<any> {
@@ -30,8 +31,8 @@ export class UserController {
     return user;
   }
   @Get('/me')
-  async getUserInfo(): Promise<any> {
-    return 'me';
+  async getUserInfo(@UserReq() userReq: JwtPayload): Promise<any> {
+    return userReq;
   }
   @Post('/refresh-token')
   async refreshToken(@Body('refreshToken') refreshToken: string): Promise<any> {
