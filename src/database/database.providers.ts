@@ -3,6 +3,8 @@ import { User } from '@biz/user/User';
 import { Question } from '@biz/question/Question';
 import { Quiz } from '@biz/quiz/Quiz';
 import { Option } from '@biz/option/Option';
+import { UserTakeQuiz } from '@biz/userTakeQuiz/UserTakeQuiz';
+import { UserChooseOption } from '@biz/userChooseOption/UserChooseOption';
 
 export const databaseProviders = [
   {
@@ -15,7 +17,7 @@ export const databaseProviders = [
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_DB_NAME,
-        entities: [User, Question, Quiz, Option],
+        entities: [User, Question, Quiz, Option, UserTakeQuiz, UserChooseOption],
         // synchronize: true,
         logging: true,
         ssl: {

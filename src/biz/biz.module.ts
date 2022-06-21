@@ -13,6 +13,10 @@ import { quizProviders } from './quiz/quiz.providers';
 import { questionProviders } from './question/question.providers';
 import { optionProviders } from './option/option.providers';
 import { DatabaseModule } from 'src/database/database.module';
+import { UserTakeQuizService } from './userTakeQuiz/usertakequiz.service';
+import { UserChooseOptionService } from './userChooseOption/userchooseoption.service';
+import { userTakeQuizProviders } from './userTakeQuiz/usertakequiz.providers';
+import { userChooseOptionProviders } from './userChooseOption/userchooseoption.providers';
 
 const listProviders = [
   UserService,
@@ -20,9 +24,13 @@ const listProviders = [
   QuizService,
   QuestionService,
   OptionService,
+  UserTakeQuizService,
+  UserChooseOptionService,
   ...quizProviders,
   ...questionProviders,
   ...optionProviders,
+  ...userTakeQuizProviders,
+  ...userChooseOptionProviders,
 ];
 @Module({
   imports: [DatabaseModule],

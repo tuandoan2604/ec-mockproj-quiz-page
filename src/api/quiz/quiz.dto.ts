@@ -25,6 +25,7 @@ export class QuestionDTO {
   @IsArray()
   @IsNotEmpty()
   options: OptionDTO[];
+  isHasPoint: boolean;
 }
 
 export class QuizDTO {
@@ -47,4 +48,20 @@ export class QuizCreateDTO extends PartialType(QuizDTO) {
   content?: string;
   @IsArray()
   questions?: QuestionDTO[];
+}
+
+export class UserTakeQuizDTO extends PartialType(QuizDTO) {
+  @IsNotEmpty()
+  id: string;
+  @IsArray()
+  @IsNotEmpty()
+  questions?: QuestionDTO[];
+  userTakeQuizId: string;
+}
+
+export class UserChooseOptionDTO extends PartialType(QuestionDTO) {
+  @IsNotEmpty()
+  id: string;
+  userChooseOptionId: string;
+  totalScore: number;
 }
