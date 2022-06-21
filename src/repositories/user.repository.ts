@@ -15,6 +15,18 @@ export class UserRepository {
       return;
     }
   }
+  async findPagination(pageIndex: number, pageSize: number): Promise<UserEntity[] | any> {
+    const take = pageSize;
+    const offset = pageSize * (pageIndex - 1);
+    try {
+      return await this.userRepository.find({
+        take: pageSize,
+        skip: offset,
+      });
+    } catch (error) {
+      return;
+    }
+  }
 
   async findOne(id: number): Promise<UserEntity | any> {
     try {
@@ -60,6 +72,18 @@ export class UserRepository {
         where: {username: username},
         select: ['id', 'username', 'password', 'fullName', 'role']
       });
+    } catch (error) {
+      return;
+    }
+  }
+
+  async count(): Promise<number | any> {
+    try {
+      const countUser = await AppDataSource
+      .createQueryBuilder(UserEntity, "user")
+      .getCount()
+
+      return countUser;
     } catch (error) {
       return;
     }

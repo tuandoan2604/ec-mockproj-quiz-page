@@ -13,7 +13,33 @@ export class UserService {
       if (!usersEntity) {
         return [];
       }
-      
+
+      const usersDTO: UserDTO[] = [];
+
+      usersEntity.forEach((user: UserEntity) =>
+        usersDTO.push(UserMapper.fromEntityToDTO(user))
+      );
+
+      return usersDTO;
+    } catch (error) {
+      return;
+    }
+  };
+
+  public getAllUserPagination = async (
+    pageIndex: number,
+    pageSize: number
+  ): Promise<UserDTO[] | any> => {
+    try {
+      const usersEntity = await this.userRepository.findPagination(
+        pageIndex,
+        pageSize
+      );
+
+      if (!usersEntity) {
+        return [];
+      }
+
       const usersDTO: UserDTO[] = [];
 
       usersEntity.forEach((user: UserEntity) =>
@@ -36,7 +62,9 @@ export class UserService {
     }
   };
 
-  public getUserByUsername = async (username: string): Promise<UserDTO | any> => {
+  public getUserByUsername = async (
+    username: string
+  ): Promise<UserDTO | any> => {
     try {
       const userFound = await this.userRepository.findByUsername(username);
 
@@ -94,6 +122,16 @@ export class UserService {
       const userDeleted = await this.userRepository.delete(userToDelete);
 
       return UserMapper.fromEntityToDTO(userDeleted);
+    } catch (error) {
+      return;
+    }
+  };
+
+  public countUser = async (): Promise<number | any> => {
+    try {
+      const count = await this.userRepository.count();
+
+      return count;
     } catch (error) {
       return;
     }

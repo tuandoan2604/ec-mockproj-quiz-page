@@ -38,6 +38,32 @@ export class UserController {
     }
   };
 
+  public getAllUserAndPagination = async (
+    req: Request,
+    res: Response
+  ): Promise<UserDTO[] | any> => {
+    let dataResponse = new DataResponse(null, 200, "Successfully");
+    try {
+      const {pageIndex, pageSize} = req.query;
+
+      let numberOfUser = await this.userService.countUser();
+      let users = await this.userService.getAllUserPagination(Number(pageIndex), Number(pageSize));
+
+      dataResponse.result = {
+        count: numberOfUser,
+        users: users,
+      };
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    } catch (error) {
+      console.log(error)
+      dataResponse.statusCode = 500;
+      dataResponse.message = "Internal server error";
+
+      return res.status(dataResponse.statusCode).send(dataResponse);
+    }
+  };
+
   public getUserById = async (
     req: Request,
     res: Response
@@ -241,6 +267,11 @@ export class UserController {
       "/get-all",
       [checkJwt, checkRole(["ROLE_ADMIN"])],
       this.getAllUser
+    );
+    this.router.get(
+      "/get-all-pagination",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.getAllUserAndPagination
     );
     this.router.get(
       "/get-one/:id",
