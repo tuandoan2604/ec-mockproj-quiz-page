@@ -40,7 +40,8 @@ export class AuthService {
   public static verifyRefreshToken(token: string): any {
     return JWT.verify(token, JwtConfig().jwtRefreshTokenSecretKey);
   }
-  public static generateRefreshToken(payload: JwtPayload, accessToken: string) {
+  public static generateRefreshToken(payload: JwtPayload) {
+    const accessToken = this.signJWT(payload, JwtConfig().jwtAccessTokenExpiresIn, JwtConfig().jwtAccessTokenSecretKey);
     const refreshToken = this.signJWT(payload, JwtConfig().jwtRefreshTokenExpiresIn, JwtConfig().jwtRefreshTokenSecretKey);
     return {
       accessToken,

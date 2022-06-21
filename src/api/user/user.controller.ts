@@ -38,7 +38,10 @@ export class UserController {
   async refreshToken(@Body('refreshToken') refreshToken: string): Promise<any> {
     if (!refreshToken) throw new HttpException('refreshToken is missing', HttpStatus.BAD_REQUEST);
     const verification = AuthService.verifyRefreshToken(refreshToken);
-    if (verification) throw new HttpException('refresh token fail ', HttpStatus.BAD_REQUEST);
-    return AuthService.generateRefreshToken(verification as JwtPayload, refreshToken);
+    if (!verification) throw new HttpException('refresh token fail ', HttpStatus.BAD_REQUEST);
+    delete verification.iat;
+    delete verification.exp;
+    delete verification.iss;
+    return AuthService.generateRefreshToken(verification as JwtPayload);
   }
 }
