@@ -7,6 +7,8 @@ import { checkRole } from "../middlewares/checkRole";
 import { isNumber } from "../utils/validation/is-number.util";
 import { isUsernameValid } from "../utils/validation/is-username-val.util";
 import { isPasswordValid } from "../utils/validation/is-password-val.util";
+import { StatusCodes } from "http-status-codes";
+const catchAsync = require("../utils/catch-async/catch-async");
 
 export class UserController {
   public readonly router: Router;
@@ -17,6 +19,13 @@ export class UserController {
     this.router = Router();
     this.routes();
   }
+
+  public getUserDetail = catchAsync(async (req: Request, res: Response) => {
+    const result = await this.userService.getUserDetail(Number(req.params.id));
+    res
+      .status(result.statusCode ? result.statusCode : StatusCodes.OK)
+      .send(result);
+  });
 
   public getAllUser = async (
     req: Request,
@@ -30,7 +39,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -44,10 +53,13 @@ export class UserController {
   ): Promise<UserDTO[] | any> => {
     let dataResponse = new DataResponse(null, 200, "Successfully");
     try {
-      const {pageIndex, pageSize} = req.query;
+      const { pageIndex, pageSize } = req.query;
 
       let numberOfUser = await this.userService.countUser();
-      let users = await this.userService.getAllUserPagination(Number(pageIndex), Number(pageSize));
+      let users = await this.userService.getAllUserPagination(
+        Number(pageIndex),
+        Number(pageSize)
+      );
 
       dataResponse.result = {
         count: numberOfUser,
@@ -56,7 +68,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -88,7 +100,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -137,7 +149,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -219,7 +231,7 @@ export class UserController {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -251,7 +263,7 @@ export class UserController {
 
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dataResponse.statusCode = 500;
       dataResponse.message = "Internal server error";
 
@@ -292,6 +304,11 @@ export class UserController {
       "/delete/:id",
       [checkJwt, checkRole(["ROLE_ADMIN"])],
       this.delete
+    );
+    this.router.get(
+      "/get-detail/:id",
+      [checkJwt, checkRole(["ROLE_ADMIN"])],
+      this.getUserDetail
     );
 
     // this.router.get("/get-all", this.getAllUser);

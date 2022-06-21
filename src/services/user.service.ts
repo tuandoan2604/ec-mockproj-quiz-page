@@ -3,9 +3,28 @@ import { UserDTO } from "./dtos/user.dto";
 import { UserMapper } from "./mappers/user.mapper";
 import { transformPassword } from "../utils/security/password.util";
 import { UserEntity } from "../entities/user.entity";
+import { StatusCodes } from "http-status-codes";
+import { ApiError } from "../utils/api-error/api-error";
 
 export class UserService {
   constructor(private readonly userRepository = new UserRepository()) {}
+
+  public getUserDetail = async (id: number): Promise<UserDTO | any> => {
+    try {
+      const userFound = await this.userRepository.findOne(id);
+
+      if (!userFound) {
+        return new ApiError(StatusCodes.NOT_FOUND, "User not found");
+      }
+
+      return UserMapper.fromEntityToDTO(userFound);
+    } catch (error) {
+      return new ApiError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Internal server error"
+      );
+    }
+  };
 
   public getAllUser = async (): Promise<UserDTO[] | any> => {
     try {
