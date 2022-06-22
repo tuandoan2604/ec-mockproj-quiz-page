@@ -13,15 +13,6 @@ export class RegisterUserDTO {
 
   // @IsNotEmpty()
   // role: 'admin' | 'normal';
-
-  public toUserEntity(salt, role) {
-    const user = new User();
-    user.username = this.username;
-    user.password = this.password;
-    user.salt = salt;
-    user.role = role;
-    return user;
-  }
 }
 
 export class LoginDTO {

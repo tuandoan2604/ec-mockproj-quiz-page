@@ -5,6 +5,7 @@ import { RegisterUserDTO, LoginDTO } from './user.dto';
 import { generateSalt } from 'src/utils/helper';
 import { JwtPayload } from 'src/biz/auth/auth.dto';
 import { UserReq } from '../decorator/user.decorator';
+import { UserTranform } from './user.tranform';
 
 @Controller('/user')
 export class UserController {
@@ -24,7 +25,7 @@ export class UserController {
     const checkUserExist = await UserService.findByUsername(username);
     if (checkUserExist) throw new HttpException('username is already taken', HttpStatus.BAD_REQUEST);
     const salt = generateSalt();
-    const userEntity = reqBody.toUserEntity(salt, 'normal');
+    const userEntity = UserTranform.toUserEntity(reqBody, salt, 'normal');
     const user = await UserService.createUser(userEntity);
     delete user.password;
     delete user.salt;
@@ -42,6 +43,6 @@ export class UserController {
     delete verification.iat;
     delete verification.exp;
     delete verification.iss;
-    return AuthService.generateRefreshToken(verification as JwtPayload);
+    return AuthService.generateRefreshToken(verification as JwtPayload, refreshToken);
   }
 }
