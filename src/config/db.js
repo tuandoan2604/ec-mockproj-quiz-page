@@ -37,5 +37,7 @@ sequelize.sync().then(() => {
 });
 
 module.exports = {
-    sequelize
+    sequelize,
+    User
+
 };
