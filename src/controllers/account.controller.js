@@ -33,7 +33,7 @@ let signUpController = async(req,res)=>{
     }catch(error) {
         if(error){
             console.log(error);
-            res.status(400).json({
+            return res.status(400).json({
                 message : "Sign Up fail",
                 error: true
             })

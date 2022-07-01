@@ -38,6 +38,10 @@ sequelize.sync().then(() => {
 
 module.exports = {
     sequelize,
-    User
+    User,
+    Quiz,
+    UserQuiz,
+    Question
+    
 
 };

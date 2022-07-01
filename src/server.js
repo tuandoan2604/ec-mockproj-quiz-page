@@ -9,7 +9,11 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json())
 
 const AccountRoutes = require('./routes/account')
+const QuizzRoutes = require('./routes/quiz.route')
+
 app.use('/account',AccountRoutes)
+app.use('/quizz',QuizzRoutes)
+
 
 
 
