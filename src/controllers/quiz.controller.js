@@ -24,6 +24,7 @@ let createQuiz = async (req, res) => {
         })
 
     } catch (err) {
+        console.log(err);
         return res.status(400).json({
             message: "err",
             status: 400,
@@ -39,7 +40,7 @@ let chooseQuiz = async (req, res) => {
     const quiz = await Quiz.findByPk(id, {
         include: {
             model: Question,
-            where: { id: id },
+            where: { quizId: id },
             required: false
         }
     });

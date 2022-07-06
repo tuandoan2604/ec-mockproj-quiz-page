@@ -56,15 +56,52 @@ let checkLogin = async (req,res,next)=>{
     }
 }
 
-let getUserById = function getUserById(id){
-    return User.findOne({_id:id})
+
+let checkAdmin = (req,res,next)=>{
+    if (req.userLocal.role === "admin"){
+        next()
+    }else{
+        return res.status(400).json({
+            message : "no permission",
+            status: 400,
+            error : true,
+        })
+    }
 }
+let getUserById = function getUserById(id){
+    return AccountModel.findOne({_id:id})
+}
+let checkAuth = async (req,res,next)=>{
+    try {
+        var token = req.cookies.token || req.body.token
+        let decodeAccount = jwt.verify(token,'minh')
+        let user = await getUserById(decodeAccount._id)
+        console.log(user)
+        if(user){
+            req.userLocal = user;
+        console.log(user)
 
-
-
+            next();
+        }else{
+            return res.status(400).json({
+                message : "tk k ton tai",
+                status: 400,
+                error : true,
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message : "hay dang nhap",
+            status: 500,
+            error : true
+        })
+    }
+}
 
 module.exports ={
     isEmail,
     checkLogin,
-    
+    checkAdmin,
+    checkAuth
+
 }

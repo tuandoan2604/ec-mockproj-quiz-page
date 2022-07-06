@@ -6,7 +6,7 @@ const UserAnswerModel = require('../models/user_answer');
 const QuizModel = require('../models/quiz');
 const QuestionModel = require('../models/question');
 
-const sequelize = new Sequelize('mock1', 'postgres', '123', {
+const sequelize = new Sequelize('mock_1', 'postgres', '123', {
     host: 'localhost',
     dialect: 'postgres'
 });
@@ -41,7 +41,7 @@ module.exports = {
     User,
     Quiz,
     UserQuiz,
-    Question
-    
+    Question,
+    UserAnswer,
 
 };
