@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 var bodyParser = require('body-parser')
 var path = require('path');
+require("dotenv").config()
+
 
 var pathh = path.resolve(__dirname,'public');
 app.use(express.static(pathh));
@@ -23,7 +25,7 @@ app.use('/user_quizz/',UserQuizRoutes)
 
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

@@ -58,7 +58,7 @@ let checkLogin = async (req,res,next)=>{
 
 
 let checkAdmin = (req,res,next)=>{
-    if (req.userLocal.role === "admin"){
+    if (req.user.role === "admin"){
         next()
     }else{
         return res.status(400).json({
@@ -74,11 +74,11 @@ let getUserById = function getUserById(id){
 let checkAuth = async (req,res,next)=>{
     try {
         var token = req.cookies.token || req.body.token
-        let decodeAccount = jwt.verify(token,'minh')
+        let decodeAccount = jwt.verify(token,process.env.JWT_ACCESS_KEY)
         let user = await getUserById(decodeAccount._id)
         console.log(user)
         if(user){
-            req.userLocal = user;
+            req.user = user;
         console.log(user)
 
             next();

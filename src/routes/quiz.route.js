@@ -4,11 +4,11 @@ var {indexQuiz,chooseQuiz, createQuiz, updateQuiz,deleteQuiz} = require('../cont
 const {checkAuth , checkAdmin} = require('../middleware/auth');
 
 
-router.get('/',indexQuiz)
 router.get('/:id',chooseQuiz)
+router.get('/',indexQuiz)
 
-router.use(checkAdmin)
 router.use(checkAuth)
+router.use(checkAdmin)
 
 router.post('/docreate', createQuiz )
 router.put('/:id', updateQuiz)

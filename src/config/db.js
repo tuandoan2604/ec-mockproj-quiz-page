@@ -6,7 +6,7 @@ const UserAnswerModel = require('../models/user_answer');
 const QuizModel = require('../models/quiz');
 const QuestionModel = require('../models/question');
 
-const sequelize = new Sequelize('mock_1', 'postgres', '123', {
+const sequelize = new Sequelize('mock_1', process.env.NAME, process.env.PASSWORD, {
     host: 'localhost',
     dialect: 'postgres'
 });

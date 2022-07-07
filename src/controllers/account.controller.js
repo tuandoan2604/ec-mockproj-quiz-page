@@ -3,7 +3,7 @@ const {User} = require('../config/db');
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
-
+let refreshTokens = []
 const saltRounds = 10;
 
 
@@ -51,8 +51,9 @@ let loginController = function(req,res){
             })
         }
         if(result){
-            let token = jwt.sign({_id : req.user._id},'minh',{expiresIn :'1d'})
-            res.cookie("token",token,{maxAge: 24*60*60*10000});
+            let accessToken = jwt.sign({_id : req.user._id},process.env.JWT_ACCESS_KEY,{expiresIn :'1d'})
+
+            res.cookie("token",accessToken,{maxAge: 24*60*60*10000});
             let user = req.user 
 
 
@@ -82,9 +83,29 @@ let loginController = function(req,res){
     )
 }
 
+let reqestRefreshToken = async(req,res)=>{
+    const refreshToken = req.cookie.refreshToken
+    if(!refreshToken){
+        return res.status(401).json("Not Auth")
+    }
+    if(!refreshTokens.include(refreshToken)){
+        return res.status(400).json("Not Valid")
+    }
+    jwt.verify(refreshToken,"minh",(err,user)=>{
+        if(err){
+            console.log(err)
+        }
+        refreshTokens = refreshTokens.filter((token)=> token !== refreshToken)
+        let newRefreshToken = jwt.sign({_id : req.user._id},process.env.JWT_ACCESS_KEY,{expiresIn :'1d'})
+        refreshTokens.push(newRefreshToken)
+        res.cookie("RefreshToken",newRefreshToken,{maxAge: 24*60*60*10000});
+        res.status(200).json("refresh token")
+    })
+}
+
 module.exports ={
     signUpController,
     loginController,
- 
+    reqestRefreshToken
    
 }
