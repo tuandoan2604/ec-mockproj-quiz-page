@@ -1,30 +1,36 @@
 const { Quiz, Question,  } = require('../config/db');
-
-// tách file service
-
+let {findAllQuiz, createNewQuiz, findQuiz, saveQuiz, destroyQuiz} = require('../services/quizz.sercive')
 
 let indexQuiz = async (req, res) => {
-    const quizzes = await Quiz.findAll();
-    return res.status(200).json({
-        message: "Get quizzes successfully",
-        status: 200,
-        quizzes
-    })
+    const quizzes = await findAllQuiz();
+    if(quizzes){
+        return res.status(200).json({
+            message: "Get quizzes successfully",
+            status: 200,
+            quizzes
+        })
+    }else{
+        return res.status(404).json({
+            message: "not found",
+            status: 404,
+            quizzes
+        })
+    }
 };
 
 let createQuiz = async (req, res) => {
     try {
-        const quiz = await Quiz.create({
-            title: req.body.title,
-        });
-        return res.status(200).json({
-            message: "Create quizz successfully",
-            status: 200,
-            error: false,
-        })
+        const data = req.body.title
+        const quiz = await createNewQuiz(data)
+        if(quiz){
+            return res.status(200).json({
+                message: "Create quizz successfully",
+                status: 200,
+                error: false,
+            })
+        }
 
     } catch (err) {
-        console.log(err);
         return res.status(400).json({
             message: "err",
             status: 400,
@@ -36,14 +42,8 @@ let createQuiz = async (req, res) => {
 }
 
 let chooseQuiz = async (req, res) => {
-    const id = req.params.id;
-    const quiz = await Quiz.findByPk(id, {
-        include: {
-            model: Question,
-            where: { quizId: id },
-            required: false
-        }
-    });
+    const id = req.params.id
+    const quiz = await findQuiz(id);
     if (!quiz) {
         return res.status(404).json({
             message: "Quizz not found",
@@ -60,18 +60,14 @@ let chooseQuiz = async (req, res) => {
 
 let updateQuiz = async (req, res) => {
     try {
-        const quiz = await Quiz.findOne({ where: { id: req.params.id } });
-        if (!quiz) 
-        return res.status(404).json({
-            message: "Quizz not found",
-            status: 404,
-            error: true,
+        const quiz = await saveQuiz(req.params.id, req.body.title);
+        if (quiz) 
+        return res.status(200).json({
+            message: "Updated Quiz",
+            status: 200,
+            error: false,
 
         })
-        const updated_quiz = await quiz.update({
-            title: req.body.title
-        });
-        res.send(updated_quiz);
     } catch (err) {
         return res.status(400).json({
             message: "Quizz not found",
@@ -83,16 +79,24 @@ let updateQuiz = async (req, res) => {
 }
 
 let deleteQuiz = async (req, res) => {
-    const quiz = await Quiz.findOne({ where: { id: req.params.id } });
-    if (!quiz) return res.status(404).send('Quiz ID not found');
+    try {
+        const quiz = await destroyQuiz(req.params.id)
+        return res.status(200).json({
+            message: "Delete successfully",
+            status: 200,
+            error: false,
+    
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            message: "Quizz not found",
+            status: 404,
+            error: true,
 
-    await quiz.destroy(); 
-    return res.status(200).json({
-        message: "Delete successfully",
-        status: 200,
-        error: false,
-
-    })
+        })
+    }
 }
 
 module.exports = {

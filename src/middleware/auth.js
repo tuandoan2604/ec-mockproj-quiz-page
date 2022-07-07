@@ -69,17 +69,17 @@ let checkAdmin = (req,res,next)=>{
     }
 }
 let getUserById = function getUserById(id){
-    return AccountModel.findOne({_id:id})
+    return User.findByPk({where :{id:id}})
 }
 let checkAuth = async (req,res,next)=>{
     try {
         var token = req.cookies.token || req.body.token
         let decodeAccount = jwt.verify(token,process.env.JWT_ACCESS_KEY)
-        let user = await getUserById(decodeAccount._id)
+        let user = await getUserById(decodeAccount.id)
         console.log(user)
         if(user){
             req.user = user;
-        console.log(user)
+        console.log("hello user ", user)
 
             next();
         }else{
@@ -90,6 +90,7 @@ let checkAuth = async (req,res,next)=>{
             })
         }
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             message : "hay dang nhap",
             status: 500,
