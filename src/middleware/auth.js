@@ -1,6 +1,5 @@
 let {User} = require('../config/db');
 var jwt = require('jsonwebtoken');
-
 let isEmail = async (req,res,next)=>{
     try {
         let user = req.body.email;
@@ -38,7 +37,11 @@ let checkLogin = async (req,res,next)=>{
         .then(user=>{
             if(!user){
                 var message= "Username or password is invalid"
-                res.render("login",{message:message}) 
+                return res.status(400).json({
+                    message : message,
+                    status: 400,
+                    error : true
+                })
             }else{
                 req.user = user
 
@@ -69,18 +72,15 @@ let checkAdmin = (req,res,next)=>{
     }
 }
 let getUserById = function getUserById(id){
-    return User.findByPk({where :{id:id}})
+    return User.findByPk(id)
 }
 let checkAuth = async (req,res,next)=>{
     try {
-        var token = req.cookies.token || req.body.token
+        var token = req.cookies.token || req.body.token 
         let decodeAccount = jwt.verify(token,process.env.JWT_ACCESS_KEY)
         let user = await getUserById(decodeAccount.id)
-        console.log(user)
         if(user){
             req.user = user;
-        console.log("hello user ", user)
-
             next();
         }else{
             return res.status(400).json({

@@ -1,6 +1,8 @@
 const express = require("express");
-const app = express();
 var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+const app = express();
+app.use(cookieParser())
 var path = require('path');
 require("dotenv").config()
 

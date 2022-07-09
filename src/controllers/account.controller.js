@@ -1,9 +1,8 @@
 const { JsonWebTokenError } = require('jsonwebtoken');
 const { User } = require('../config/db');
-
+var cookie = require('cookie');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
-let refreshTokens = []
 const saltRounds = 10;
 
 let { createUser } = require('../services/account.service')
@@ -44,7 +43,9 @@ let loginController = function (req, res) {
         }
         if (result) {
             let accessToken = jwt.sign({ id: req.user.id }, process.env.JWT_ACCESS_KEY, { expiresIn: '1d' })
+            refreshTokens.push(accessToken)
             res.cookie("token", accessToken, { maxAge: 24 * 60 * 60 * 10000 });
+            console.log(accessToken)
             let user = req.user
 
 
@@ -73,25 +74,34 @@ let loginController = function (req, res) {
     }
     )
 }
+let refreshTokens = []
 
 let reqestRefreshToken = async (req, res) => {
-    const refreshToken = req.cookie.refreshToken
+    const refreshToken = req.cookies.token || req.body.token 
     if (!refreshToken) {
         return res.status(401).json("Not Auth")
     }
-    if (!refreshTokens.include(refreshToken)) {
+    if (!refreshTokens.includes(refreshToken)) {
         return res.status(400).json("Not Valid")
     }
-    jwt.verify(refreshToken, "minh", (err, user) => {
-        if (err) {
-            console.log(err)
+    let decodeAccount = jwt.verify(refreshToken, process.env.JWT_ACCESS_KEY)
+        let user = await User.findByPk(decodeAccount.id)
+        if (user) {
+            refreshTokens = refreshTokens.filter((token) => token !== refreshToken)
+            let newRefreshToken = jwt.sign({ id: user.id }, process.env.JWT_ACCESS_KEY, { expiresIn: '1d' })
+            refreshTokens.push(newRefreshToken)
+            res.cookie("RefreshToken", newRefreshToken, { maxAge: 24 * 60 * 60 * 10000 });
+            res.status(200).json("refresh token")
+           
+        }else{
+            return res.status(400).json({
+                message : "tk k ton tai",
+                status: 400,
+                error : true,
+            })
         }
-        refreshTokens = refreshTokens.filter((token) => token !== refreshToken)
-        let newRefreshToken = jwt.sign({ id: req.user.id }, process.env.JWT_ACCESS_KEY, { expiresIn: '1d' })
-        refreshTokens.push(newRefreshToken)
-        res.cookie("RefreshToken", newRefreshToken, { maxAge: 24 * 60 * 60 * 10000 });
-        res.status(200).json("refresh token")
-    })
+        
+    
 }
 
 module.exports = {
