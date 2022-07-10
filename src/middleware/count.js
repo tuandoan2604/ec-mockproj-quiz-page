@@ -1,7 +1,8 @@
 const { Quiz ,Question } = require('../config/db');
 
 async function findQuiz(req, res, next) {
-  const quiz_id = req.params.quizId ? req.params.quizId : req.body.quiz_id;
+  const quiz_id = req.params.id;
+  console.log("id day", quiz_id);
   const quiz = await Quiz.findByPk(quiz_id, {
     include: {
       model: Question,

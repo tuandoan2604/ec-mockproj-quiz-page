@@ -3,11 +3,11 @@ const router = express.Router();
 var {indexQuiz,chooseQuiz, createQuiz, updateQuiz,deleteQuiz} = require('../controllers/quiz.controller');
 const {checkAuth , checkAdmin} = require('../middleware/auth');
 
+router.get('/',indexQuiz)
+router.get('/:id',chooseQuiz)
+
 router.use(checkAuth)
 router.use(checkAdmin)
-
-router.get('/:id',chooseQuiz)
-router.get('/',indexQuiz)
 
 
 router.post('/docreate', createQuiz )

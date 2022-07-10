@@ -10,11 +10,11 @@ let getAllUserQuiz =  async (req, res) => {
 let createUserQuiz = async (req, res) => {
     let user_quiz = UserQuiz.build({
       score: req.score,
-      userId: 1,
-      quizId: req.body.quiz_id
+      userId: req.user.id,
+      quizId: req.params.id
     });
     
-    // console.log(answer);
+    console.log(user_quiz);
     return sequelize.transaction( t => {
       return user_quiz.save({ transaction: t }).then( uq => {
         // console.log(uq.userId);

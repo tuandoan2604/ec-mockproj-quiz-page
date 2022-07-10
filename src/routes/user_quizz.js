@@ -6,11 +6,11 @@ const {checkAuth , checkAdmin} = require('../middleware/auth');
 
 let {chooseUserQuiz,deleteUserQuiz,createUserQuiz,getAllUserQuiz} = require('../controllers/user_quiz.controller');
 
-
+router.use(checkAuth)
 router.get('/', getAllUserQuiz);
 
-router.post('/:id', findQuiz,getScore,createUserQuiz);
 
+router.post('/:id', findQuiz,getScore,createUserQuiz);
 
 router.get('/:id', chooseUserQuiz);
 
