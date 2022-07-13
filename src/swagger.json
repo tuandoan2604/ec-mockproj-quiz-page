@@ -1,0 +1,2294 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "(Quiz) Server API - Swagger",
+    "description": "Account Admin: admin - 12345 <br /> <br /> Account User: user - 12345",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/"
+    }
+  ],
+  "definitions": {
+    "UserLoginDTO": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "admin"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        },
+        "remember": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserRegisterDTO": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "quanghv"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        },
+        "fullName": {
+          "type": "string",
+          "example": "Hà Văn Quang"
+        }
+      }
+    },
+    "UserDTO": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "quanghv"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        },
+        "fullName": {
+          "type": "string",
+          "example": "Hà Văn Quang"
+        },
+        "role": {
+          "type": "string",
+          "example": "ROLE_USER"
+        }
+      }
+    },
+    "UserDTOToUpdate": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "username": {
+          "type": "string",
+          "example": "quanghv"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        },
+        "fullName": {
+          "type": "string",
+          "example": "Hà Văn Quang"
+        },
+        "role": {
+          "type": "string",
+          "example": "ROLE_USER"
+        }
+      }
+    },
+    "QuizDTO": {
+      "type": "object",
+      "required": ["code"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "MAS291"
+        },
+        "name": {
+          "type": "string",
+          "example": "Statistics and Probability"
+        }
+      }
+    },
+    "QuestionDTO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "What is NodeJS?"
+        },
+        "isMutiple": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "QuestionCreateDTO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "What is NodeJS?"
+        },
+        "isMutiple": {
+          "type": "boolean",
+          "example": true
+        },
+        "quiz": {
+          "type": "object",
+          "example": {
+            "id": 1
+          }
+        }
+      }
+    },
+    "AnswerDTO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "NodeJS is a JavaScript runtime built on Chrome's V8 JavaScript engine?"
+        },
+        "isCorrect": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "AnswerCreateDTO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "NodeJS is a JavaScript runtime built on Chrome's V8 JavaScript engine?"
+        },
+        "isCorrect": {
+          "type": "boolean",
+          "example": true
+        },
+        "question": {
+          "type": "object",
+          "example": {
+            "id": 1
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "quiz": {
+            "type": "quizs-array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Quiz": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "user-object"
+          },
+          "questions": {
+            "type": "questions-array"
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isMutiple": {
+            "type": "boolean"
+          },
+          "quiz": {
+            "type": "quiz-object"
+          },
+          "answers": {
+            "type": "answers-array"
+          }
+        }
+      },
+      "Answer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "question": {
+            "type": "question-object"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth Controller"],
+        "summary": "Authorization - Login api retrieving token",
+        "requestBody": {
+          "description": "UserLoginDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserLoginDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged"
+          },
+          "400": {
+            "description": "Invalid username or password"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth Controller"],
+        "summary": "Authorization - Register user",
+        "requestBody": {
+          "description": "UserRegisterDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserRegisterDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserRegisterDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserRegisterDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered"
+          },
+          "400 - Invalid username!": {
+            "description": "Accepts 5 to 15 characters with any lower case character, digit or special symbol “_-” only."
+          },
+          "400 - Invalid password!": {
+            "description": "Password must contain between 5-20 characters and no spaces."
+          },
+          "400": {
+            "description": "Username is already in use"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/user/get-all": {
+      "get": {
+        "tags": ["User Controller"],
+        "summary": "Get the list of users",
+        "operationId": "getAllUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/user/get-one/{id}": {
+      "get": {
+        "tags": ["User Controller"],
+        "summary": "Get user by id",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getUserById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - User Info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/user/create": {
+      "post": {
+        "tags": ["User Controller"],
+        "summary": "Create user",
+        "operationId": "createUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "UserDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username is already in use"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/user/update": {
+      "put": {
+        "tags": ["User Controller"],
+        "summary": "Update user",
+        "operationId": "updateUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "UserDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserDTOToUpdate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/UserDTOToUpdate"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/UserDTOToUpdate"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/UserDTOToUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username is already in use"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/user/delete/{id}": {
+      "delete": {
+        "tags": ["User Controller"],
+        "summary": "Delete user",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "deleteUserById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/UserDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/get-all": {
+      "get": {
+        "tags": ["Quiz Controller"],
+        "summary": "Get the list of quizs",
+        "operationId": "getAllQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - List of quíz",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/get-one/{id}": {
+      "get": {
+        "tags": ["Quiz Controller"],
+        "summary": "Get quiz by id",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getQuizById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of quiz to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - Quiz Info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Quiz not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/create": {
+      "post": {
+        "tags": ["Quiz Controller"],
+        "summary": "Create quiz",
+        "operationId": "createQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz code already exists"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/create/mutiple-quiz": {
+      "post": {
+        "tags": ["Quiz Controller"],
+        "summary": "Create mutiple quiz",
+        "operationId": "createQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/update": {
+      "put": {
+        "tags": ["Quiz Controller"],
+        "summary": "Update quiz",
+        "operationId": "updateQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz code already exists"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Quiz not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/quiz/delete/{id}": {
+      "delete": {
+        "tags": ["Quiz Controller"],
+        "summary": "Delete quiz",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "deleteQuizById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of quiz to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Quiz not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/get-all": {
+      "get": {
+        "tags": ["Question Controller"],
+        "summary": "Get the list of question",
+        "operationId": "getAllQuestion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - List of question",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/get-one/{id}": {
+      "get": {
+        "tags": ["Question Controller"],
+        "summary": "Get question by id",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getQuestionById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of question to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - Question Info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Question not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/create": {
+      "post": {
+        "tags": ["Question Controller"],
+        "summary": "Create question",
+        "operationId": "createQuestion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuestionDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/create/mutiple-question": {
+      "post": {
+        "tags": ["Question Controller"],
+        "summary": "Create mutiple question",
+        "operationId": "createQuestion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuestionDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuestionCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/update": {
+      "put": {
+        "tags": ["Question Controller"],
+        "summary": "Update question",
+        "operationId": "updateQuestion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuestionDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuestionDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuestionDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuestionDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuestionDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Question not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/question/delete/{id}": {
+      "delete": {
+        "tags": ["Question Controller"],
+        "summary": "Delete question",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "deleteQuestionById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of quesstion to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuestionDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Question not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/get-all": {
+      "get": {
+        "tags": ["Answer Controller"],
+        "summary": "Get the list of answer",
+        "operationId": "getAllAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - List of answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/get-one/{id}": {
+      "get": {
+        "tags": ["Answer Controller"],
+        "summary": "Get answer by id",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getAnswerById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of answer to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - Answer Info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/create": {
+      "post": {
+        "tags": ["Answer Controller"],
+        "summary": "Create answer",
+        "operationId": "createAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "AnswerDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/create/mutiple-answer": {
+      "post": {
+        "tags": ["Answer Controller"],
+        "summary": "Create mutiple answer",
+        "operationId": "createAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "AnswerDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/AnswerCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerCreateDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/update": {
+      "put": {
+        "tags": ["Answer Controller"],
+        "summary": "Update answer",
+        "operationId": "updateAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "AnswerDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/answer/delete/{id}": {
+      "delete": {
+        "tags": ["Answer Controller"],
+        "summary": "Delete answer",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "deleteAnswerById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of answer to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/start-quiz": {
+      "post": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Start quiz",
+        "operationId": "startQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/get-answers-to-do/{questionSummaryId}": {
+      "get": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Get answers to do",
+        "produces": ["application/xml", "application/json"],
+        "operationId": "getAnswerToDo",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "questionSummaryId",
+            "in": "path",
+            "description": "question summary id of answers to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully - Answers To Do",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID! ID Must be a number"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Answer not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/create-quiz-data-sample": {
+      "post": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Create quiz data sample",
+        "operationId": "createQuizDataSample",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz code already exists"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/save-answer": {
+      "put": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Save answer",
+        "operationId": "saveAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "AnswerDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/AnswerDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/AnswerDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/to-do-quiz/submit-quiz": {
+      "post": {
+        "tags": ["To Do Quiz Controller"],
+        "summary": "Submit quiz",
+        "operationId": "submitQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "QuizDTO",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/definitions/QuizDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/definitions/QuizDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+[
+    {
+      "name": "10 năm",
+      "isCorrect": false,
+      "question": {
+        "id": 2
+      }
+    },
+    {
+      "name": "25 năm",
+      "isCorrect": false,
+      "question": {
+        "id": 2
+      }
+    },
+    {
+      "name": "30 năm",
+      "isCorrect": true,
+      "question": {
+        "id": 2
+      }
+    },
+    {
+      "name": "35 năm",
+      "isCorrect": false,
+      "question": {
+        "id": 2
+      }
+    }
+  ]
+  

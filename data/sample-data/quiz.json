@@ -1,0 +1,222 @@
+{
+  "code": "HCM201",
+  "name": "Ho Chi Minh Ideology",
+  "questions": [
+    {
+      "name": "Nguyễn Ái Quốc đọc Sơ thảo lần thứ nhất những luận cương về vấn đề dân tộc và vấn đề thuộc địa của Lênin vào thời gian nào?",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "7/1917",
+          "isCorrect": false
+        },
+        {
+          "name": "7/1918",
+          "isCorrect": false
+        },
+        {
+          "name": "7/1919",
+          "isCorrect": false
+        },
+        {
+          "name": "7/1920",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "name": "Hồ Chí Minh mất bao nhiêu năm bôn ba nước ngoài để tìm đường cứu nước?",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "10 năm",
+          "isCorrect": false
+        },
+        {
+          "name": "25 năm",
+          "isCorrect": false
+        },
+        {
+          "name": "30 năm",
+          "isCorrect": true
+        },
+        {
+          "name": "35 năm",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Giai đoạn nào sau đây tư tưởng Hồ Chí Minh tiếp tục phát triển, hoàn thiện?",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "1945 đến 1960",
+          "isCorrect": false
+        },
+        {
+          "name": "1930 đến 1969",
+          "isCorrect": false
+        },
+        {
+          "name": "1945 đến 1969",
+          "isCorrect": true
+        },
+        {
+          "name": "1930 đến 1945",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Giai đoạn nào sau đây Hồ Chí Minh tìm thấy con đường cứu nước giải phóng dân tộc?",
+      "isMutiple": false, 
+      "answers": [
+        {
+          "name": "1911 đến 1930",
+          "isCorrect": false
+        },
+        {
+          "name": "1911 đến 1920",
+          "isCorrect": true
+        },
+        {
+          "name": "1911 đến 1935",
+          "isCorrect": false
+        },
+        {
+          "name": "1930 đến 1945",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Văn hoá phương Tây nào sau đây ảnh hưởng đến sự hình thành tư tưởng Hồ Chí Minh trước khi người ra đi tìm đường cứu nước?        ",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "Văn hoá dân chủ, tiến bộ của Đức",
+          "isCorrect": false
+        },
+        {
+          "name": "Văn hoá dân chủ, tiến bộ của Pháp",
+          "isCorrect": true
+        },
+        {
+          "name": "Văn hoá dân chủ, tiến bộ của Nga",
+          "isCorrect": false
+        },
+        {
+          "name": "Văn hóa dân chủ, tiến bộ của Anh",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Nguyễn Tất Thành ở Anh vào thời gian nào?",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "1911-1912",
+          "isCorrect": false
+        },
+        {
+          "name": "1912-1913",
+          "isCorrect": false
+        },
+        {
+          "name": "1914-1917",
+          "isCorrect": true
+        },
+        {
+          "name": "1911-1915",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Ngoại ngữ nào sau đây được Hồ Chí Minh sử dụng trong thời gian học tập ở trường Quốc học Huế?",
+      "isMutiple": false,
+      "answers": [
+        {
+          "name": "Tiếng Anh",
+          "isCorrect": false
+        },
+        {
+          "name": "Tiếng Pháp",
+          "isCorrect": true
+        },
+        {
+          "name": "Tiếng Trung",
+          "isCorrect": false
+        },
+        {
+          "name": "Tiếng Nga",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "name": "Theo Hồ Chí Minh, ưu điểm lớn nhất của chủ nghĩa Tam dân của Tôn Trung Sơn là gì?",
+      "isMutiple": true,
+      "answers": [
+        {
+          "name": "Phù hợp với điều kiện thực tế nước ta.",
+          "isCorrect": true
+        },
+        {
+          "name": "Đấu tranh vì tự do, dân chủ.",
+          "isCorrect": false
+        },
+        {
+          "name": "Chống phong kiến.",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "name": "Tư tưởng Hồ Chí Minh hình thành trên cơ sở:",
+      "isMutiple": true,
+      "answers": [
+        {
+          "name": "Vận dụng và phát triển sáng tạo chủ nghĩa Mác- Lênin",
+          "isCorrect": true
+        },
+        {
+          "name": "Tiếp thu toàn bộ chủ nghĩa Mác-Lênin",
+          "isCorrect": false
+        },
+        {
+          "name": "Tiếp thu một bộ phận của chủ nghĩa Mác-Lênin",
+          "isCorrect": false
+        },
+        {
+          "name": "Vận dụng hoàn toàn chủ nghĩa Mác - Lênin",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "name": "Một trong những giá trị của văn hoá phương Tây được Hồ Chí Minh tiếp thu để hình thành tư tưởng của mình là:",
+      "isMutiple": true,
+      "answers": [
+        {
+          "name": "Tư tưởng văn hoá dân chủ và cách mạng của cách mạng Pháp và cách mạng Mỹ.",
+          "isCorrect": true
+        },
+        {
+          "name": "Những mặt tích cực của Nho Giáo",
+          "isCorrect": true
+        },
+        {
+          "name": "Tư tưởng vị tha của Phật giáo",
+          "isCorrect": false
+        },
+        {
+          "name": "Chủ nghĩa Tam dân của Tôn Trung Sơn.",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

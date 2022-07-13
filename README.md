@@ -35,3 +35,10 @@ IV, Write a concise README
   
 ## Notes
 We recommend using Express JS, PostgreSQL. However, we encourage you to use the programming language that you are most comfortable with because we want you to shine with all your skills and knowledge.
+
+## Install Node Packgae Manage
+-- npm install
+
+## Run Project
+-- npm run dev
+
