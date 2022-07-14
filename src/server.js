@@ -16,6 +16,7 @@ const AccountRoutes = require('./routes/account')
 const QuizzRoutes = require('./routes/quiz.route')
 const QuestionRoutes = require('./routes/question.route')
 const UserQuizRoutes = require('./routes/user_quizz')
+const {errHandel} = require('./ultilities/customErr')
 
 
 
@@ -24,8 +25,12 @@ app.use('/quizz',QuizzRoutes)
 app.use('/questions/',QuestionRoutes)
 app.use('/user_quizz/',UserQuizRoutes)
 
-
-
+app.all('*',(req,res,next)=>{
+  const err = new Error ('Not Found');
+  err.statusCode = 404;
+  next(err)
+})
+app.use(errHandel)
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

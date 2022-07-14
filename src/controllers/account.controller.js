@@ -4,40 +4,41 @@ var cookie = require('cookie');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
-
+const {customError} = require('../ultilities/customErr')
+const errHandel = require('../middleware/errorHandle')
 let { createUser } = require('../services/account.service')
 
-let signUpController = async (req, res) => {
-    try {
+let signUpController = errHandel(async (req, res , next) => {
+    
+        
         let createNewUser = await createUser(req.body)
         if (createNewUser) {
             let token = jwt.sign({ id: req.body.id }, process.env.JWT_ACCESS_KEY);
-            // console.log(token);
             res.cookie("token", token, { maxAge: 60 * 60 * 10000 });
             return res.status(200).json({
                 message: "Sign Up success",
                 error: false
-            })
+            })   
+        
+        
+         }else{
+             const error = new customError('Sign Up fail',400)
+                 return res.status(error.statusCode).json({
+                     message: error.message,
+                     error: true
+                 })
 
         }
+        
+    
+})
 
-    } catch (error) {
-        if (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: "Sign Up fail",
-                error: true
-            })
-        }
-    }
-}
-
-let loginController = function (req, res) {
+let loginController = errHandel (function (req, res) {
     bcrypt.compare(req.body.password, req.user.password, function (err, result) {
         if (err) {
-            return res.status(500).json({
-                message: "loi sever",
-                status: 500,
+            const error = new customError('loi sever',500)
+            return res.status(error.statusCode).json({
+                message: error.message,
                 error: true
             })
         }
@@ -68,15 +69,18 @@ let loginController = function (req, res) {
             }
 
         } else {
-            var message = "Username or password is invalid"
-            res.json(message)
+            const error = new customError('Username or password is invalid',400)
+            return res.status(error.statusCode).json({
+                message: error.message,
+                error: true
+            })
         }
     }
     )
-}
+})
 let refreshTokens = []
 
-let reqestRefreshToken = async (req, res) => {
+let reqestRefreshToken = errHandel( async (req, res) => {
     const refreshToken = req.cookies.token || req.body.token 
     if (!refreshToken) {
         return res.status(401).json("Not Auth")
@@ -94,15 +98,16 @@ let reqestRefreshToken = async (req, res) => {
             res.status(200).json("refresh token")
            
         }else{
-            return res.status(400).json({
-                message : "tk k ton tai",
-                status: 400,
-                error : true,
+            const error = new customError('tk k ton tai',400)
+            return res.status(error.statusCode).json({
+                message: error.message,
+                error: true
             })
+        
         }
         
     
-}
+})
 
 module.exports = {
     signUpController,
